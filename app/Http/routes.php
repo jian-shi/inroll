@@ -27,7 +27,7 @@ Route::bind('address', function($id){
 });
 
 
-Route::resource ('elector.feedback','FeedbackController');
+Route::resource ('elector.relation','RelationController');
 Route::get('query', 'AddressController@query');
 
 App::bind('App\Inroll\Repositories\ElectorRepositoryInterface','App\Inroll\Repositories\ElectorRepository');

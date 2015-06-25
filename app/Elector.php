@@ -24,8 +24,8 @@ class Elector extends Model {
         return $this->belongsTo('App\Electorate');
     }
 
-    public function feedback(){
-        return $this->hasOne('App\Feedback');
+    public function relation(){
+        return $this->hasOne('App\Relation');
     }
 
 }

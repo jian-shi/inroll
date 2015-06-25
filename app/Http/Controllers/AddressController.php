@@ -1,13 +1,10 @@
 <?php namespace App\Http\Controllers;
 
-//use Illuminate\Routing\Controller;
+
 use App\Address;
 use App\Electorate;
-use App\Feedback;
 use Illuminate\Http\Request;
 use App\Inroll\Repositories\AddressRepository;
-use Illuminate\Support\Facades\Redirect;
-use Maatwebsite\Excel\Facades\Excel;
 
 class AddressController extends Controller {
 
@@ -52,7 +49,7 @@ class AddressController extends Controller {
 
         $addresses = $this->address->getByField($match);
 
-        return View('address.door', compact('addresses'))->with('electorates', $electorate_lists);
+        return View('address.relation', compact('addresses'))->with('electorates', $electorate_lists);
 
     }
 

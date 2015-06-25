@@ -9,13 +9,17 @@
 						@if($errors->any())
 						<div class="alert alert-success" role="alert"> The record of {{$elector->surname}}, {{$elector->given_name}} has been updated!</div>
 						@endif
-						{!! Form::model($elector, ['url'=>'elector/'.$elector->id, 'method'=> 'PATCH', 'class'=>'form-horizontal']) !!}
+						{!! Form::model($elector->relation,['action'=> ['RelationController@store', $elector->id],'class'=>'form-horizontal','id'=>'form']) !!}
+
 							<h3 class="bg-info">GNA/Hostile</h3>
 							<div class="form-group">
-								<div class="col-sm-4"><label>{!! Form::hidden('gna',0) !!}{!! Form::checkbox('gna', 1) !!} Gone No Address</label></div>
-								<div class="col-sm-4"><label>{!! Form::hidden('hostile',0) !!}{!! Form::checkbox('hostile',1) !!} Hostile</label></div>
+								<div class="col-sm-4"><label>{!! isset($elector->relation)?Form::hidden($elector->id.'[is_gna]',0): null !!}<input type="checkbox" name={{$elector->id.'[is_gna]'}} value="1" {{isset($elector->relation->is_gna) && $elector->relation->is_gna==1?'checked=checked': 'false'}}>
+                                                                             Gone No Address</label></div>
+								<div class="col-sm-4"><label>{!! isset($elector->relation)?Form::hidden($elector->id.'[is_hostile]',0): null !!}<input type="checkbox" name={{$elector->id.'[is_hostile]'}} value="1" {{isset($elector->relation->is_hostile) && $elector->relation->is_hostile==1?'checked=checked': 'false'}}>
+                                                                             Hostile</label></div>
 								<div class="col-sm-4">{!! Form::submit('Submit', ['class'=> 'btn btn-primary']) !!}</div>
 							</div>
+
 							<h3 class="bg-info">Personal Details</h3>
     						<div class="form-group">							
       							<div class="col-sm-6"><label>Surname</label><input type="text" class="form-control" value="{{$elector->surname}}"></div>

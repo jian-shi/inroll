@@ -106,7 +106,7 @@ class SearchController extends Controller {
 
         $data = DB::table('electors')
             -> leftjoin('addresses',function($join){
-                    $join->on('electors.address_id', '=', 'addresses.id');
+                $join->on('electors.address_id', '=', 'addresses.id');
             })
 
             -> leftjoin('age',function($join){
@@ -115,13 +115,23 @@ class SearchController extends Controller {
             -> leftjoin('census',function($join){
                 $join->on('census.id', '=', 'addresses.meshblock_id');
             })
+            -> leftjoin('relation',function($join){
+                $join->on('electors.id', '=', 'relation.elector_id');
+            })
+
             ->select(DB::raw('CONCAT(CONCAT_ws("", CONCAT_ws("/",`addresses`.`flat_no`,`addresses`.`house_no`),`addresses`.`house_alpha`), " ",`addresses`.`street`) as address, addresses.street as street, addresses.suburb_town as address2,`addresses`.`post_code` as postalCode, `census`.`areaunit_code` as area_unit,`addresses`.`city` as city, GROUP_CONCAT(CONCAT(SUBSTRING(`electors`.`forenames` from 1 for 1)," ",`electors`.`surname`) SEPARATOR ", ")as name'))
-            ->whereIn('electors.electorate_id', $electorates)
             ->where($match)
+            ->whereIn('electors.electorate_id', $electorates)
             ->whereIn('age.id', range($age_from, $age_to))
             ->whereIn('census.nzdep', range($dep_from,$dep_to))
-            ->where('gna', 0)
-            ->where ('hostile', 0)
+            ->where(function($query){
+                $query->whereNull('relation.is_gna')
+                      ->orWhere('relation.is_gna', 0);
+            })
+            ->where(function($query){
+                $query->whereNull('relation.is_hostile')
+                    ->orWhere('relation.is_hostile', 0);
+            })
             ->groupBy('address')
             ->orderBy(DB::raw('area_unit,street,MOD(addresses.`house_no`,2),CAST(`addresses`.`house_no` AS DECIMAL)'))
             ->get();
