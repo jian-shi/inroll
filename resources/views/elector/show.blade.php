@@ -48,7 +48,7 @@
    							 <h3 class="bg-info">Enrolment Details</h3>
     						<div class="form-group">
       							<div class="col-sm-6"><label>General/Maori</label><input type="text" class="form-control" value="{{$elector->maori_descent}}"></div>
-     							<div class="col-sm-6"><label>Last Changed</label><input type="text" class="form-control" value="{{$elector->updated_at}}"></div>
+     							<div class="col-sm-6"><label>Last Changed</label><input type="text" class="form-control" value="{{isset($elector->relation->updated_at)?$elector->relation->updated_at.' @ '. $elector->relation->user->name:$elector->updated_at. ' @ Original'}}"></div>
     						</div>
     					{!! Form::close() !!}
 					</div>
