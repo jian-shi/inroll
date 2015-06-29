@@ -41,9 +41,9 @@
             <td>{!! link_to_route('elector_path', $elector->forenames.", ".$elector->surname, [$elector->id]) !!}</td>
 
             {{--{!! Form::model($elector, ['url'=>'elector/'.$elector->id, 'method'=> 'PATCH', 'class'=>'form-horizontal']) !!}--}}
-            {!! Form::model($elector->feedback,['action'=> ['FeedbackController@store', $elector->id],'class'=>'form-horizontal']) !!}
-            <td>{!! isset($elector->feedback)?Form::hidden($elector->id.'[is_gna]',0): null !!}<input type="checkbox" name={{$elector->id.'[is_gna]'}} value="1" {{isset($elector->feedback->is_gna) && $elector->feedback->is_gna==1?'checked=checked': 'false'}}></td>
-            <td>{!! isset($elector->feedback)?Form::hidden($elector->id.'[is_hostile]',0): null !!}<input type="checkbox" name={{$elector->id.'[is_hostile]'}} value="1" {{isset($elector->feedback->is_hostile)&& $elector->feedback->is_hostile==1?'checked=checked': 'false'}}></td>
+            {!! Form::model($elector->relation,['action'=> ['RelationController@store', $elector->id],'class'=>'form-horizontal']) !!}
+            <td>{!! isset($elector->relation)?Form::hidden($elector->id.'[is_gna]',0): null !!}<input type="checkbox" name={{$elector->id.'[is_gna]'}} value="1" {{isset($elector->relation->is_gna) && $elector->relation->is_gna==1?'checked=checked': 'false'}}></td>
+            <td>{!! isset($elector->relation)?Form::hidden($elector->id.'[is_hostile]',0): null !!}<input type="checkbox" name={{$elector->id.'[is_hostile]'}} value="1" {{isset($elector->relation->is_hostile)&& $elector->relation->is_hostile==1?'checked=checked': 'false'}}></td>
 
 
 

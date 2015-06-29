@@ -33,9 +33,40 @@
                      </div>
 
                 <h3 class="bg-info"> Found {{$count_elector}} Electors, {{$count_address}} Households</h3>
-                {!! Form::submit('Search',  ['class'=> 'btn btn-primary pull-left']) !!}
-                <div class="col-sm-2">{!! link_to_route ('export','Export', null, array('class' => 'btn btn-primary pull-left')) !!}</div>
+                {{--{!! Form::submit('Search',  ['class'=> 'btn btn-info btn-lg pull-left'])!!}--}}
+                <div class="col-sm-2"><button type="submit" class="btn btn-primary btn-md"><span class="glyphicon glyphicon-search"></span> Search</button></div>
+
+                @if ($count_elector>0) <div class="col-sm-2"><button type="button" class="btn btn-primary btn-md" data-toggle="modal" data-target="#myModal"><span class="glyphicon glyphicon-cloud-download"></span> Download</button></div> @endif
             {!! Form::close() !!}
+            {!! Form::open(['method' => 'GET','action'=> ['SearchController@export'],'class'=>'form-horizontal','id'=>'form']) !!}
+
+            <div id="myModal" class="modal fade" role="dialog">
+              <div class="modal-dialog">
+
+                <!-- Modal content-->
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title">Export for</h4>
+                  </div>
+                  <div class="modal-body">
+                  <div class="row">
+
+                    <div class="col-sm-6">{!! Form::select('export',['mail'=>'Mailing', 'door'=>'Door Knocking'], null, ['class' =>'form-control','id'=>'export']) !!}</div>
+                  </div>
+                  </div>
+                  <div class="modal-footer">
+                    <button type="button" class="btn btn-default btn-md" data-dismiss="modal">Close</button>
+                    {{--{!! link_to_route ('export','Export', null, array('class' => 'btn btn-primary pull-left')) !!}--}}
+                    {!! Form::submit('Download List',  ['class'=> 'btn btn-primary btn-md pull-left']) !!}
+                          </div>
+                  </div>
+                </div>
+
+              </div>
+              {!! Form::close() !!}
+
+            </div>
         </div>
 
     @endsection

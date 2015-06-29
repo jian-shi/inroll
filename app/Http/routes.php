@@ -34,6 +34,7 @@ App::bind('App\Inroll\Repositories\ElectorRepositoryInterface','App\Inroll\Repos
 App::bind('App\Inroll\Repositories\AddressRepositoryInterface','App\Inroll\Repositories\AddressRepository');
 
 Route::get('Request::url()/export', ['uses' => 'SearchController@export', 'as' => 'export']);
+Route::get('Request::url()/export', ['uses' => 'SearchController@export', 'as' => 'export']);
 
 $router->resource('elector', 'ElectorController',
     ['names'=>[

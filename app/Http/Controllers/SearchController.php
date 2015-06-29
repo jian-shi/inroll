@@ -103,6 +103,18 @@ class SearchController extends Controller {
         $age_to = $savedRequest['age_to'];
         $dep_from = $savedRequest['dep_from'];
         $dep_to = $savedRequest['dep_to'];
+        $export = Input::get('export');
+
+        if ($export=='door') {
+
+            $dbSelect = 'CONCAT(CONCAT_ws("", CONCAT_ws("/",`addresses`.`flat_no`,`addresses`.`house_no`),`addresses`.`house_alpha`), " ",`addresses`.`street`) as address, addresses.street as street, addresses.suburb_town as address2,`addresses`.`post_code` as postalCode, `census`.`areaunit_code` as area_unit,`addresses`.`city` as city, CONCAT(`electors`.`forenames`," ",`electors`.`surname`) as name';
+            $group = ['name','address'];
+        }
+        else {
+
+            $dbSelect = 'CONCAT(CONCAT_ws("", CONCAT_ws("/",`addresses`.`flat_no`,`addresses`.`house_no`),`addresses`.`house_alpha`), " ",`addresses`.`street`) as address, addresses.street as street, addresses.suburb_town as address2,`addresses`.`post_code` as postalCode, `census`.`areaunit_code` as area_unit,`addresses`.`city` as city, GROUP_CONCAT(CONCAT(SUBSTRING(`electors`.`forenames` from 1 for 1)," ",`electors`.`surname`) SEPARATOR ", ")as name';
+            $group = 'address';
+        }
 
         $data = DB::table('electors')
             -> leftjoin('addresses',function($join){
@@ -119,7 +131,7 @@ class SearchController extends Controller {
                 $join->on('electors.id', '=', 'relation.elector_id');
             })
 
-            ->select(DB::raw('CONCAT(CONCAT_ws("", CONCAT_ws("/",`addresses`.`flat_no`,`addresses`.`house_no`),`addresses`.`house_alpha`), " ",`addresses`.`street`) as address, addresses.street as street, addresses.suburb_town as address2,`addresses`.`post_code` as postalCode, `census`.`areaunit_code` as area_unit,`addresses`.`city` as city, GROUP_CONCAT(CONCAT(SUBSTRING(`electors`.`forenames` from 1 for 1)," ",`electors`.`surname`) SEPARATOR ", ")as name'))
+            ->select(DB::raw($dbSelect))
             ->where($match)
             ->whereIn('electors.electorate_id', $electorates)
             ->whereIn('age.id', range($age_from, $age_to))
@@ -132,7 +144,7 @@ class SearchController extends Controller {
                 $query->whereNull('relation.is_hostile')
                     ->orWhere('relation.is_hostile', 0);
             })
-            ->groupBy('address')
+            ->groupBy($group)
             ->orderBy(DB::raw('area_unit,street,MOD(addresses.`house_no`,2),CAST(`addresses`.`house_no` AS DECIMAL)'))
             ->get();
 
