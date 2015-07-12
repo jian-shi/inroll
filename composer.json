@@ -9,7 +9,9 @@
         "laravel/framework": "5.1.*",
         "maatwebsite/excel": "~2.0.0",
         "illuminate/html": "~5.0",
-        "twbs/bootstrap": "^3.3@dev"
+        "twbs/bootstrap": "^3.3@dev",
+        "dinesh/barcode": "5.0.*@dev"
+
     },
     "require-dev": {
         "fzaninotto/faker": "~1.4",

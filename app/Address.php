@@ -1,7 +1,6 @@
 <?php namespace App;
 
 use Illuminate\Database\Eloquent\Model;
-//use Maatwebsite\Excel\Facades\Excel;
 
 class Address extends Model 
 {
@@ -19,5 +18,4 @@ class Address extends Model
     public function feedbacks(){
         return $this->hasMany('App\Feedback');
     }
-
 }

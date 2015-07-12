@@ -14,9 +14,11 @@
 //    return view('welcome');
 //});
 
+
+
 Route::get('/', 'SearchController@index');
 Route::get('home', 'HomeController@index');
-
+Route::get('/phone', 'AddressController@phone');
 
 Route::bind('elector', function($id){
     return App\Elector::where('id', $id)->first();
@@ -26,15 +28,17 @@ Route::bind('address', function($id){
     return App\Address::where('id', $id)->first();
 });
 
-
+Route::get ('db','DBManageController@update');
 Route::resource ('elector.relation','RelationController');
-Route::get('query', 'AddressController@query');
+Route::get('query', 'AddressController@knock');
 
 App::bind('App\Inroll\Repositories\ElectorRepositoryInterface','App\Inroll\Repositories\ElectorRepository');
 App::bind('App\Inroll\Repositories\AddressRepositoryInterface','App\Inroll\Repositories\AddressRepository');
 
 Route::get('Request::url()/export', ['uses' => 'SearchController@export', 'as' => 'export']);
 Route::get('Request::url()/export', ['uses' => 'SearchController@export', 'as' => 'export']);
+
+
 
 $router->resource('elector', 'ElectorController',
     ['names'=>[
@@ -70,9 +74,9 @@ Route::get('auth/login', 'Auth\AuthController@getLogin');
 Route::post('auth/login', 'Auth\AuthController@postLogin');
 Route::get('auth/logout', 'Auth\AuthController@getLogout');
 
-/*
- * Display SQL Queries
- */
+///*
+// * Display SQL Queries
+// */
 //Event::listen('illuminate.query', function($sql)
 //{
 //    var_dump($sql);

@@ -42,8 +42,10 @@
    	 						</div>
     						<h3 class="bg-info">Contact Details</h3>
     						<div class="form-group">
-      							<div class="col-sm-6"><label>Phone</label><input type="text" class="form-control" value= "{{$elector -> telephone}} "></div>
-     							<div class="col-sm-6"><label>Email</label><input type="email" class="form-control" id="inputEmail1" value="{{ $elector-> email}}"></div>
+      							<div class="col-sm-4"><label>Phone</label>{!! isset($elector->phone->landline)?"<a href='skype:" .$elector->phone->landline. "?call'>":null !!} <input type="text" class="form-control" value= "{!! isset($elector->phone->landline)?$elector->phone->landline:null!!} "></a></div>
+     							<div class="col-sm-4"><label>Mobile</label>{!! isset($elector->phone->mobile)?"<a href='skype:" .$elector->phone->mobile. "?call'>":null !!} <input type="text" class="form-control" value= "{!! isset($elector->phone->mobile)?$elector->phone->mobile:null!!} "></a></div>
+
+     							<div class="col-sm-4"><label>Email</label><input type="email" class="form-control" id="inputEmail1" value="{{ $elector-> email}}"></div>
    							 </div>
    							 <h3 class="bg-info">Enrolment Details</h3>
     						<div class="form-group">

@@ -23,7 +23,6 @@ class ElectorController extends Controller {
 	 */
 	public function index(Request $request)
 	{
-
         $request->flash();
         $electors=$this->getQueryResult($request);
         $electorate_lists = Electorate::lists('electorate', 'id');
@@ -33,6 +32,7 @@ class ElectorController extends Controller {
 
     public function getQueryResult($request)
     {
+
         $electorate=$request->get('electorate');
         $surname=$request->get('surname');
         $match = ['surname' => $surname];

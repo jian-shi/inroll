@@ -15,22 +15,22 @@ class AddressController extends Controller {
 	 * @return Response
 	 */
     protected $address;
+    protected $electorate_lists;
     public function __construct(AddressRepository $address)
     {
         $this->middleware('auth');
         $this->address = $address;
+        $this->electorate_lists = Electorate::lists('electorate', 'id');
     }
 
 	public function index()
 	{
-        $electorate_lists = Electorate::lists('electorate', 'id');
-        return View('address.index')->with('electorates',$electorate_lists);
+        return View('address.index')->with('electorates',$this->electorate_lists);
 	}
 
-    public function query(Request $request)
+    public function query($request)
     {
         $request->flash();
-        $electorate_lists = Electorate::lists('electorate', 'id');
         $electorate=$request->get('electorate');
         $street=$request->get('street');
         $match['street'] = $street;
@@ -48,10 +48,22 @@ class AddressController extends Controller {
         };
 
         $addresses = $this->address->getByField($match);
-
-        return View('address.relation', compact('addresses'))->with('electorates', $electorate_lists);
+        return $addresses;
 
     }
+    
+    public function knock(Request $request)
+    {
+        $addresses = $this->query($request);
+        return View('address.relation', compact('addresses'))->with('electorates', $this->electorate_lists);
+    }
+
+    public function phone(Request $request)
+    {
+        $addresses = $this->query($request);
+        return View('address.phone', compact('addresses'))->with('electorates', $this->electorate_lists);
+    }
+
 
 	/**
 	 * Show the form for creating a new resource.

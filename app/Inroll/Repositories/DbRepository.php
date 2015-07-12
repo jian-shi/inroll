@@ -24,7 +24,7 @@ use Illuminate\Support\Facades\DB;
         }
 
         public function getByName($match,$forename){
-            $results = $this->model->where($match)->where('forenames', 'like', "$forename%")->get();
+            $results = $this->model->where($match)->where('forenames', 'like', "$forename%")->orderBy('forenames')->get();
             return $results;
         }
     }
