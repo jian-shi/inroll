@@ -10,7 +10,7 @@
 	<th>Surname, Given name</th>
 	<th>GNA</th>
 	<th>Hostile</th>
-	{{--<th>Door knocking Status</th>--}}
+
 	<th>Save</th>
 
 @foreach ($address->electors as $elector)

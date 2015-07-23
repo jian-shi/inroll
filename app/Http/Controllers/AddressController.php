@@ -28,7 +28,7 @@ class AddressController extends Controller {
         return View('address.index')->with('electorates',$this->electorate_lists);
 	}
 
-    public function query($request)
+    public function query(Request $request)
     {
         $request->flash();
         $electorate=$request->get('electorate');
@@ -47,22 +47,13 @@ class AddressController extends Controller {
             $match = array_add ($match, 'house_no', $house);
         };
 
+
         $addresses = $this->address->getByField($match);
-        return $addresses;
+
+        return View('address.relation', compact('addresses'))->with('electorates', $this->electorate_lists);
 
     }
     
-    public function knock(Request $request)
-    {
-        $addresses = $this->query($request);
-        return View('address.relation', compact('addresses'))->with('electorates', $this->electorate_lists);
-    }
-
-    public function phone(Request $request)
-    {
-        $addresses = $this->query($request);
-        return View('address.phone', compact('addresses'))->with('electorates', $this->electorate_lists);
-    }
 
 
 	/**

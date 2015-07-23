@@ -32,8 +32,9 @@
 	    <th>Persu</th>
 	    <th>Hosti</th>
 	    <th>Candi</th>
-	    <th>Party</th>
 	    <th>GNA</th>
+	    <th>Party</th>
+
 	    </thead>
 	    <tbody>
         @foreach ($addresses as $address)
@@ -68,9 +69,9 @@
                     <td>{!! isset($elector->relation)?Form::hidden($elector->id.'[is_persuadable]',0): null !!}<input type="checkbox" name={{$elector->id.'[is_persuadable]'}} value="1" {{isset($elector->relation->is_persuadable)&& $elector->relation->is_persuadable==1?'checked=checked': 'false'}}></td>
                     <td>{!! isset($elector->relation)?Form::hidden($elector->id.'[is_hostile]',0): null !!}<input type="checkbox" name={{$elector->id.'[is_hostile]'}} value="1" {{isset($elector->relation->is_hostile)&& $elector->relation->is_hostile==1?'checked=checked': 'false'}}></td>
                     <td>{!! isset($elector->relation)?Form::hidden($elector->id.'[is_candidate_vote]',0): null !!}<input type="checkbox" name={{$elector->id.'[is_candidate_vote]'}} value="1" {{isset($elector->relation->is_candidate_vote)&& $elector->relation->is_candidate_vote==1?'checked=checked': 'false'}}></td>
-                    <td>{!! isset($elector->relation)?Form::hidden($elector->id.'[is_party_vote]',0): null !!}<input type="checkbox" name={{$elector->id.'[is_party_vote]'}} value="1" {{isset($elector->relation->is_party_vote)&& $elector->relation->is_party_vote==1?'checked=checked': 'false'}}></td>
                     <td>{!! isset($elector->relation)?Form::hidden($elector->id.'[is_gna]',0): null !!}<input type="checkbox" name={{$elector->id.'[is_gna]'}} value="1" {{isset($elector->relation->is_gna) && $elector->relation->is_gna==1?'checked=checked': 'false'}}></td>
-                </tr>
+                    <td>{!! Form::select($elector->id.'[party_vote]',[null=>'N/A','act'=>'ACT', 'national'=>'National', 'Labour'=>'Labour', 'conservative'=>'Conservative','nzfirst'=>'NzFirst','green'=>'Green','other'=>'Other'], isset($elector->relation->party_vote)?$elector->relation->party_vote:null, ['class' =>'form-control','id'=>'input-party']) !!}</td>
+                    </tr>
 
             @endforeach
 	    @endforeach

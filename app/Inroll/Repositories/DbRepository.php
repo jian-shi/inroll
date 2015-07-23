@@ -27,4 +27,5 @@ use Illuminate\Support\Facades\DB;
             $results = $this->model->where($match)->where('forenames', 'like', "$forename%")->orderBy('forenames')->get();
             return $results;
         }
+
     }

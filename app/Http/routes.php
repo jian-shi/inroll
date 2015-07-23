@@ -18,7 +18,7 @@
 
 Route::get('/', 'SearchController@index');
 Route::get('home', 'HomeController@index');
-Route::get('/phone', 'AddressController@phone');
+Route::get('/phone', 'PhoneController@index');
 
 Route::bind('elector', function($id){
     return App\Elector::where('id', $id)->first();
@@ -30,12 +30,11 @@ Route::bind('address', function($id){
 
 Route::get ('db','DBManageController@update');
 Route::resource ('elector.relation','RelationController');
-Route::get('query', 'AddressController@knock');
+Route::get('query', 'AddressController@query');
 
 App::bind('App\Inroll\Repositories\ElectorRepositoryInterface','App\Inroll\Repositories\ElectorRepository');
 App::bind('App\Inroll\Repositories\AddressRepositoryInterface','App\Inroll\Repositories\AddressRepository');
 
-Route::get('Request::url()/export', ['uses' => 'SearchController@export', 'as' => 'export']);
 Route::get('Request::url()/export', ['uses' => 'SearchController@export', 'as' => 'export']);
 
 
@@ -56,10 +55,23 @@ $router->resource('address', 'AddressController',
         'index' => 'address_path',
         'show'  => 'address_path',
         'edit'  => 'address_path',
-        'update'  => 'address_path',
-        'feedback' => 'address_path',
-        'query' => 'address_path'],
-        'only'=>['index','show','edit','update','feedback','query']
+        'update'  => 'address_path'
+        ],
+        'only'=>['index','show','edit','update']
+
+
+    ]);
+$router->resource('phone', 'PhoneController',
+
+    ['names'=>[
+        'index' => 'phone_path',
+        'show'  => 'phone_path',
+        'edit'  => 'phone_path',
+        'update'  => 'phone_path',
+        'query' => 'phone_path'
+    ],
+        'only'=>['index','show','edit','update','query']
+
 
     ]);
 

@@ -18,4 +18,9 @@ class Address extends Model
     public function feedbacks(){
         return $this->hasMany('App\Feedback');
     }
+
+    public function phones(){
+        return $this->hasManyThrough('App\Phone','App\Elector');
+    }
+
 }
