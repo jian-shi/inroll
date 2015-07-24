@@ -27,14 +27,9 @@
 	    <th>Age</th>
 	    <th>Title</th>
 	    <th>Occ</th>
-	    <th>Home</th>
-	    <th>Frien</th>
-	    <th>Persu</th>
-	    <th>Hosti</th>
-	    <th>Candi</th>
-	    <th>GNA</th>
+	    <th>Feedback</th>
 	    <th>Party</th>
-
+        <th>GNA</th>
 	    </thead>
 	    <tbody>
         @foreach ($addresses as $address)
@@ -62,15 +57,15 @@
                     <td>{!! $elector->title !!}</td>
                     <td>{!! $elector->occupation !!}</td>
 
-                    {!! Form::model($elector->relation,['action'=> ['RelationController@store', $elector->id],'class'=>'form-horizontal','id'=>'form']) !!}
-
-                    <td>{!! isset($elector->relation)?Form::hidden($elector->id.'[is_home]',0): null !!}<input type="checkbox" name={{$elector->id.'[is_home]'}} value="1" {{isset($elector->relation->is_home)&& $elector->relation->is_home==1?'checked=checked': 'false'}}></td>
-                    <td>{!! isset($elector->relation)?Form::hidden($elector->id.'[is_friendly]',0): null !!}<input type="checkbox" name={{$elector->id.'[is_friendly]'}} value="1" {{isset($elector->relation->is_friendly)&& $elector->relation->is_friendly==1?'checked=checked': 'false'}}></td>
-                    <td>{!! isset($elector->relation)?Form::hidden($elector->id.'[is_persuadable]',0): null !!}<input type="checkbox" name={{$elector->id.'[is_persuadable]'}} value="1" {{isset($elector->relation->is_persuadable)&& $elector->relation->is_persuadable==1?'checked=checked': 'false'}}></td>
-                    <td>{!! isset($elector->relation)?Form::hidden($elector->id.'[is_hostile]',0): null !!}<input type="checkbox" name={{$elector->id.'[is_hostile]'}} value="1" {{isset($elector->relation->is_hostile)&& $elector->relation->is_hostile==1?'checked=checked': 'false'}}></td>
-                    <td>{!! isset($elector->relation)?Form::hidden($elector->id.'[is_candidate_vote]',0): null !!}<input type="checkbox" name={{$elector->id.'[is_candidate_vote]'}} value="1" {{isset($elector->relation->is_candidate_vote)&& $elector->relation->is_candidate_vote==1?'checked=checked': 'false'}}></td>
-                    <td>{!! isset($elector->relation)?Form::hidden($elector->id.'[is_gna]',0): null !!}<input type="checkbox" name={{$elector->id.'[is_gna]'}} value="1" {{isset($elector->relation->is_gna) && $elector->relation->is_gna==1?'checked=checked': 'false'}}></td>
+                    {!! Form::model($elector->feedback,['action'=> ['RelationController@store', $elector->id],'class'=>'form-horizontal','id'=>'form']) !!}
+                    <td>{!! Form::select($elector->id.'[relation]',[null=>'?','is_friendly'=>'Friendly', 'is_persuadable'=>'Persuadable', 'is_hostile'=>'Hostile', 'is_candidate_vote'=>'Candidate Vote','not_home'=>'Visited Not Home'], isset($elector->relation->relation)?$elector->relation->relation:null, ['class' =>'form-control','id'=>'input-party']) !!}</td>
+                    {{--<td>{!! isset($elector->relation)?Form::hidden($elector->id.'[is_home]',0): null !!}<input type="checkbox" name={{$elector->id.'[is_home]'}} value="1" {{isset($elector->relation->is_home)&& $elector->relation->is_home==1?'checked=checked': 'false'}}></td>--}}
+                    {{--<td>{!! isset($elector->relation)?Form::hidden($elector->id.'[is_friendly]',0): null !!}<input type="checkbox" name={{$elector->id.'[is_friendly]'}} value="1" {{isset($elector->relation->is_friendly)&& $elector->relation->is_friendly==1?'checked=checked': 'false'}}></td>--}}
+                    {{--<td>{!! isset($elector->relation)?Form::hidden($elector->id.'[is_persuadable]',0): null !!}<input type="checkbox" name={{$elector->id.'[is_persuadable]'}} value="1" {{isset($elector->relation->is_persuadable)&& $elector->relation->is_persuadable==1?'checked=checked': 'false'}}></td>--}}
+                    {{--<td>{!! isset($elector->relation)?Form::hidden($elector->id.'[is_hostile]',0): null !!}<input type="checkbox" name={{$elector->id.'[is_hostile]'}} value="1" {{isset($elector->relation->is_hostile)&& $elector->relation->is_hostile==1?'checked=checked': 'false'}}></td>--}}
+                    {{--<td>{!! isset($elector->relation)?Form::hidden($elector->id.'[is_candidate_vote]',0): null !!}<input type="checkbox" name={{$elector->id.'[is_candidate_vote]'}} value="1" {{isset($elector->relation->is_candidate_vote)&& $elector->relation->is_candidate_vote==1?'checked=checked': 'false'}}></td>--}}
                     <td>{!! Form::select($elector->id.'[party_vote]',[null=>'N/A','act'=>'ACT', 'national'=>'National', 'Labour'=>'Labour', 'conservative'=>'Conservative','nzfirst'=>'NzFirst','green'=>'Green','other'=>'Other'], isset($elector->relation->party_vote)?$elector->relation->party_vote:null, ['class' =>'form-control','id'=>'input-party']) !!}</td>
+                    <td>{!! isset($elector->relation)?Form::hidden($elector->id.'[is_gna]',0): null !!}<input type="checkbox" name={{$elector->id.'[is_gna]'}} value="1" {{isset($elector->relation->is_gna) && $elector->relation->is_gna==1?'checked=checked': 'false'}}></td>
                     </tr>
 
             @endforeach

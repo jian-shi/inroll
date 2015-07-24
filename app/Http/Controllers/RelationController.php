@@ -41,11 +41,14 @@ class RelationController extends Controller {
 	public function store()
 	{
         $data = Input::except('_token');
+//        dd($data);
         foreach($data as $key => $value) {
-            $relation = Relation::firstOrNew(['elector_id' => $key]);
-            $value['user_id'] = Auth::user()->id;
-            $relation->fill($value);
-            $relation->save();
+            if($value['relation']!=null){
+                $relation = Relation::firstOrNew(['elector_id' => $key]);
+                $value['user_id'] = Auth::user()->id;
+                $relation->fill($value);
+                $relation->save();
+            }
         }
         session()->flash('flash_message', 'Records have been updated!');
         return redirect::back();
