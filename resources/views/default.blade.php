@@ -15,9 +15,9 @@
     <meta charset="UTF-8">
 	<title>inRoll v1.1</title>
 	<style>
-		/*body{*/
-			/*padding-top: 50px;*/
-		/*}*/
+		body{
+			padding-bottom: 50px;
+		}
 		table.floatThead-table {
             border-top: none;
             border-bottom: none;
@@ -93,9 +93,12 @@
         $('#selectElectorate').select2({
             placeholder: 'Choose Electorate(s)'
         });
-         $('#selectOccupation').select2({
-                    placeholder: 'Choose Occupation(s)'
-                });
+        $('#selectArea').select2({
+            placeholder: 'Choose Area Units(s)'
+        });
+        $('#selectOccupation').select2({
+            placeholder: 'Choose Occupation(s)'
+         });
     </script>
     <script>
         $("table.table").floatThead()

@@ -4,6 +4,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Input;
 use App\Age;
+use App\AreaUnit;
 use Illuminate\Support\Facades\DB;
 use Maatwebsite\Excel\Facades\Excel;
 use App\Electorate;
@@ -48,50 +49,66 @@ class SearchController extends Controller {
         $count_address = "0";}
         $age_lists = Age::lists('age_from', 'id');
         $electorate_lists = Electorate::lists('electorate', 'id');
-        return view('search')->with('age_range',$age_lists)->with('count_elector', $count_elector)->with('count_address', $count_address)->with('electorates',$electorate_lists);
+        $area_lists = AreaUnit::selectRaw('CONCAT(areaunit_code,"-", areaunit_description) as AreaName, areaunit_code')->orderBy('areaunit_code')->lists('AreaName', 'areaunit_code');
+
+        return view('search')->with('age_range',$age_lists)->with('count_elector', $count_elector)->with('count_address', $count_address)->with('electorates',$electorate_lists)->with('areaunits',$area_lists);
     }
 
     public function getQueryResult()
     {
         $electorates = Input::get('electorate');
-        $ethnic=Input::get ('ethnic');
-        $area_unit=Input::get ('area_unit');
-        $match =[];
-        if ($ethnic != null){
-            $match['electors.ethnic'] = $ethnic;
-        }
-        if ($area_unit != null){
-            $match['census.areaunit_code'] = $area_unit;
-        }
+        $ethnic= Input::get ('ethnic');
+        $area_units= Input::get ('area_unit');
+        $occupation= Input::get ('occupation');
 
 
-        $age_from = Input::get('age_from');
-        $age_to = Input::get('age_to');
-        $dep_from = Input::get('dep_from');
-        $dep_to = Input::get('dep_to');
-        $request = ['electorates'=>$electorates,'match'=>$match, 'age_from'=>$age_from, 'age_to'=>$age_to,'dep_from'=>$dep_from, 'dep_to'=>$dep_to];
-        Session::put('request', $request);
+            $match =[];
+            if ($ethnic != null){
+                $match['electors.ethnic'] = $ethnic;
+            }
 
-        $count = DB::table('electors')
-            -> join('addresses',function($join){
-                $join->on('electors.address_id', '=', 'addresses.id');
-            })
-            -> join('age',function($join){
-                $join->on('age.id', '=', 'electors.date_of_birth_range');
-            })
-            -> join('census',function($join){
-                $join->on('census.id', '=', 'addresses.meshblock_id');
-            })
-            -> select(DB::raw('count(electors.id) as elector, count(Distinct CONCAT_WS("/", `addresses`.`house_no`, " ", `addresses`.`flat_no`,`addresses`.`house_alpha`,  " ", `addresses`.`street`)) as address' ))
-            -> where ($match)
-            -> whereIn('electors.electorate_id', $electorates)
-            -> whereBetween('census.nzdep', array($dep_from,$dep_to))
-            -> whereIn('age.id', range($age_from, $age_to))
-            -> where('gna', 0)
-            -> where ('hostile', 0)
-            -> get();
+            $age_from = Input::get('age_from');
+            $age_to = Input::get('age_to');
+            $dep_from = Input::get('dep_from');
+            $dep_to = Input::get('dep_to');
+            $request = ['electorates'=>$electorates,'match'=>$match, 'area_units'=>$area_units,'occupation'=>$occupation,'age_from'=>$age_from, 'age_to'=>$age_to,'dep_from'=>$dep_from, 'dep_to'=>$dep_to];
+            Session::put('request', $request);
 
-        return $count[0];
+            $query = DB::table('electors')
+                -> join('addresses',function($join){
+                    $join->on('electors.address_id', '=', 'addresses.id');
+                })
+                -> join('age',function($join){
+                    $join->on('age.id', '=', 'electors.date_of_birth_range');
+                })
+                -> join('census',function($join){
+                    $join->on('census.id', '=', 'addresses.meshblock_id');
+                })
+                -> select(DB::raw('count(electors.id) as elector, count(Distinct CONCAT_WS("/", `addresses`.`house_no`, " ", `addresses`.`flat_no`,`addresses`.`house_alpha`,  " ", `addresses`.`street`)) as address' ))
+
+                -> where ($match)
+                -> where (function($query) use ($occupation, $area_units, $electorates){
+                    $query->where('gna', 0);
+                    $query-> where ('hostile', 0);
+                    if($occupation)
+                        $query->whereIn('electors.occupation_code', $occupation);
+                    if($area_units){
+                        $query->whereIn('census.areaunit_code', $area_units);
+                        }
+                    else{
+                        $query->WhereIn('electors.electorate_id', $electorates);
+                        }
+
+                })
+
+                -> whereBetween('census.nzdep', array($dep_from,$dep_to))
+                -> whereIn('age.id', range($age_from, $age_to))
+                ->get()
+            ;
+
+        return $query[0];
+
+
     }
 
     public function export()
@@ -99,6 +116,10 @@ class SearchController extends Controller {
         $savedRequest = Session::get('request');
         $match = $savedRequest['match'];
         $electorates = $savedRequest['electorates'];
+        $area_units= $savedRequest ['area_units'];
+        $occupation= $savedRequest ['occupation'];
+
+
         $age_from = $savedRequest['age_from'];
         $age_to = $savedRequest['age_to'];
         $dep_from = $savedRequest['dep_from'];
@@ -107,15 +128,14 @@ class SearchController extends Controller {
 
         if ($export=='door') {
 
-            $dbSelect = 'CONCAT(CONCAT_ws("", CONCAT_ws("/",`addresses`.`flat_no`,`addresses`.`house_no`),`addresses`.`house_alpha`), " ",`addresses`.`street`) as address,`electors`.`title` as title, CONCAT(`age`.`age_from`,"~",`age`.`age_to`) as age, electors.occupation as occupation, addresses.street as street, addresses.suburb_town as address2,`addresses`.`post_code` as postalCode, `census`.`areaunit_code` as area_unit,`addresses`.`city` as city, CONCAT(`electors`.`forenames`," ",`electors`.`surname`) as name';
-            $group = ['name','address'];
+            $dbSelect = 'CONCAT(CONCAT_ws("", CONCAT_ws("/",`addresses`.`flat_no`,`addresses`.`house_no`),`addresses`.`house_alpha`), " ",`addresses`.`street`) as address,`electors`.`title` as title, CONCAT(`age`.`age_from`,"~",`age`.`age_to`) as age, electors.occupation as occupation, addresses.street as street, addresses.suburb_town as address2,`addresses`.`post_code` as postalCode, `census`.`areaunit_code` as area_unit,`addresses`.`city` as city, CONCAT(`electors`.`forenames`," ",`electors`.`surname`) as name, `addresses`.`id` as addressId';
+            $group = ['name','addressId'];
         }
         else {
 
-            $dbSelect = 'CONCAT(CONCAT_ws("", CONCAT_ws("/",`addresses`.`flat_no`,`addresses`.`house_no`),`addresses`.`house_alpha`), " ",`addresses`.`street`) as address, addresses.street as street, addresses.suburb_town as address2,`addresses`.`post_code` as postalCode, `census`.`areaunit_code` as area_unit,`addresses`.`city` as city, GROUP_CONCAT(CONCAT(SUBSTRING(`electors`.`forenames` from 1 for 1)," ",`electors`.`surname`) SEPARATOR ", ")as name';
-            $group = 'address';
+            $dbSelect = 'CONCAT(CONCAT_ws("", CONCAT_ws("/",`addresses`.`flat_no`,`addresses`.`house_no`),`addresses`.`house_alpha`), " ",`addresses`.`street`) as address, addresses.street as street, addresses.suburb_town as address2,`addresses`.`post_code` as postalCode, `census`.`areaunit_code` as area_unit,`addresses`.`city` as city, GROUP_CONCAT(CONCAT(SUBSTRING(`electors`.`forenames` from 1 for 1)," ",`electors`.`surname`) SEPARATOR ", ")as name,`addresses`.`id` as addressId';
+            $group = 'addressId';
         }
-
         $data = DB::table('electors')
             -> leftjoin('addresses',function($join){
                 $join->on('electors.address_id', '=', 'addresses.id');
@@ -133,7 +153,19 @@ class SearchController extends Controller {
 
             ->select(DB::raw($dbSelect))
             ->where($match)
-            ->whereIn('electors.electorate_id', $electorates)
+            ->where(function($query) use ($occupation, $area_units, $electorates){
+                $query->where('gna', 0);
+                $query-> where ('hostile', 0);
+                if($occupation)
+                    $query->whereIn('electors.occupation_code', $occupation);
+                if($area_units){
+                    $query->whereIn('census.areaunit_code', $area_units);
+                }
+                else{
+                    $query->WhereIn('electors.electorate_id', $electorates);
+                }
+
+            })
             ->whereIn('age.id', range($age_from, $age_to))
             ->whereIn('census.nzdep', range($dep_from,$dep_to))
             ->where(function($query){

@@ -43,7 +43,7 @@ class RelationController extends Controller {
         $data = Input::except('_token');
 //        dd($data);
         foreach($data as $key => $value) {
-            if($value['relation']!=null){
+            if($value['relation']!=null||$value['is_gna']==1||$value['party_vote']!=null){
                 $relation = Relation::firstOrNew(['elector_id' => $key]);
                 $value['user_id'] = Auth::user()->id;
                 $relation->fill($value);

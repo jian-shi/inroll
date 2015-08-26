@@ -6,13 +6,13 @@
                     <div class="form-group">
                         <label for="input-electorate" class="col-sm-2 control-label">Electorate</label>
                         <div class="col-sm-10">
-                            {!! Form::select('electorate[]', $electorates, null, ['required','id'=> 'selectElectorate' ,'class' =>'form-control', 'multiple' ]) !!} {!! $errors->first('electorate', '<span class="help-block">:message</span>') !!}
+                            {!! Form::select('electorate[]', $electorates, null, ['id'=> 'selectElectorate' ,'class' =>'form-control', 'multiple' ]) !!} {!! $errors->first('electorate', '<span class="help-block">:message</span>') !!}
                         </div>
                     </div>
 
                     <div class="form-group">
                         <label for="input-area_unit" class="col-sm-2 control-label">Area Unit</label>
-                        <div class="col-sm-4">{!! Form::input('search', 'area_unit', null, ['class' =>'form-control','placeholder' => 'Area Unit']) !!}</div>
+                        <div class="col-sm-4">{!! Form::select('area_unit[]', $areaunits, null, ['id'=> 'selectArea','class' =>'form-control','multiple']) !!}</div>
                         <label for="input-deprivation" class="col-sm-2 control-label">Deprivation</label>
                         <div class="col-sm-2">{!! Form::selectRange('dep_from',1,10, 1, ['class' =>'form-control', 'id'=>'input-deprivation']) !!}</div>
                         <div class="col-sm-2">{!! Form::selectRange('dep_to',1,10, 10, ['class' =>'form-control']) !!}</div>
@@ -29,7 +29,7 @@
 
                      <div class="form-group">
                          <label for="input-occupation" class="col-sm-2 control-label">Occupation</label>
-                         <div class="col-sm-6">{!! Form::select('occupation[]',[null=> 'any'], null, ['id'=>'selectOccupation', 'class' =>'form-control','multiple']) !!}</div>
+                         <div class="col-sm-6">{!! Form::select('occupation[]',['1'=>'Cat.1'], null, ['id'=>'selectOccupation', 'class' =>'form-control','multiple']) !!}</div>
                      </div>
 
                 <h3 class="bg-info"> Found {{$count_elector}} Electors, {{$count_address}} Households</h3>
