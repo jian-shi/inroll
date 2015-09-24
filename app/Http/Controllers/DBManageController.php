@@ -72,6 +72,12 @@ class DbManageController extends Controller
             ->update(['address_id' => DB::raw('concat(`electorate_id`,"_",`meshblock_id`,"_",`house_no`,"_",`flat_no`,"_",
    `house_alpha`,"_",`street`)')]);
         echo "1 sucess";
+        /* update delivery_route d, addresses a
+set d.`address_id` = a.id
+where d.`address` = CONCAT(a.`flat_no`,"/",a.`house_no`,a.`house_alpha`,  " ", a.`street`) and a.`electorate_id` =12
+        */
+
+
         DB::table('addresses')->truncate();
         try{
             DB::statement('insert ignore addresses (id, electorate_id ,meshblock_id,

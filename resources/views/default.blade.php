@@ -13,7 +13,7 @@
     <link rel="stylesheet" href="//cdn.datatables.net/plug-ins/1.10.7/integration/bootstrap/3/dataTables.bootstrap.css">
 
     <meta charset="UTF-8">
-	<title>inRoll v1.1</title>
+	<title>inRoll v1.2</title>
 	<style>
 		body{
 			padding-bottom: 50px;
@@ -52,7 +52,7 @@
               <ul class="dropdown-menu" role="menu">
                 <li><a href="/auth/logout">Logout</a></li>
                 <li class="divider"></li>
-                <li><a href="#">Report Bug</a></li>
+                <li><a href="#">Report Bugs</a></li>
                 <li class="divider"></li>
                 <li><a href="/db">Database Management</a></li>
               </ul>
