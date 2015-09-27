@@ -128,12 +128,12 @@ class SearchController extends Controller {
 
         if ($export=='door') {
 
-            $dbSelect = 'CONCAT(CONCAT_ws("", CONCAT_ws("/",`addresses`.`flat_no`,`addresses`.`house_no`),`addresses`.`house_alpha`), " ",`addresses`.`street`) as address,`electors`.`title` as title, CONCAT(`age`.`age_from`,"~",`age`.`age_to`) as age, electors.occupation as occupation, addresses.street as street, addresses.suburb_town as address2,`addresses`.`post_code` as postalCode, `census`.`areaunit_code` as area_unit,`addresses`.`city` as city, CONCAT(`electors`.`forenames`," ",`electors`.`surname`) as name, `addresses`.`id` as addressId';
+            $dbSelect = 'CONCAT(CONCAT_ws("", CONCAT_ws("/",`addresses`.`flat_no`,`addresses`.`house_no`),`addresses`.`house_alpha`), " ",`addresses`.`street`) as address,`electors`.`title` as title, CONCAT(`age`.`age_from`,"~",`age`.`age_to`) as age, electors.occupation as occupation, addresses.street as street, addresses.suburb_town as address2,`addresses`.`post_code` as postalCode, `census`.`areaunit_code` as area_unit,`addresses`.`city` as city, CONCAT(`electors`.`forenames`," ",`electors`.`surname`) as name, `addresses`.`id` as addressId, `addresses`.`route_id` as route_id';
             $group = ['name','addressId'];
         }
         else {
 
-            $dbSelect = 'CONCAT(CONCAT_ws("", CONCAT_ws("/",`addresses`.`flat_no`,`addresses`.`house_no`),`addresses`.`house_alpha`), " ",`addresses`.`street`) as address, addresses.street as street, addresses.suburb_town as address2,`addresses`.`post_code` as postalCode, `census`.`areaunit_code` as area_unit,`addresses`.`city` as city, GROUP_CONCAT(CONCAT(SUBSTRING(`electors`.`forenames` from 1 for 1)," ",`electors`.`surname`) SEPARATOR ", ")as name,`addresses`.`id` as addressId';
+            $dbSelect = 'CONCAT(CONCAT_ws("", CONCAT_ws("/",`addresses`.`flat_no`,`addresses`.`house_no`),`addresses`.`house_alpha`), " ",`addresses`.`street`) as address, addresses.street as street, addresses.suburb_town as address2,`addresses`.`post_code` as postalCode, `census`.`areaunit_code` as area_unit,`addresses`.`city` as city, GROUP_CONCAT(CONCAT(SUBSTRING(`electors`.`forenames` from 1 for 1)," ",`electors`.`surname`) SEPARATOR ", ")as name,`addresses`.`id` as addressId, `addresses`.`route_id` as route_id';
             $group = 'addressId';
         }
         $data = DB::table('electors')
@@ -150,6 +150,7 @@ class SearchController extends Controller {
             -> leftjoin('relation',function($join){
                 $join->on('electors.id', '=', 'relation.elector_id');
             })
+
 
             ->select(DB::raw($dbSelect))
             ->where($match)
@@ -173,8 +174,8 @@ class SearchController extends Controller {
                       ->orWhere('relation.is_gna', 0);
             })
             ->where(function($query){
-                $query->whereNull('relation.is_hostile')
-                    ->orWhere('relation.is_hostile', 0);
+                $query->whereNull('relation.relation')
+                    ->orWhere('relation.relation', "hostile");
             })
             ->groupBy($group)
             ->orderBy(DB::raw('area_unit,street,MOD(addresses.`house_no`,2),CAST(`addresses`.`house_no` AS DECIMAL)'))
