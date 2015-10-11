@@ -73,9 +73,22 @@ class DbManageController extends Controller
    `house_alpha`,"_",`street`)')]);
         echo "1 sucess";
         /* update delivery_route d, addresses a
-set d.`address_id` = a.id
-where d.`address` = CONCAT(a.`flat_no`,"/",a.`house_no`,a.`house_alpha`,  " ", a.`street`) and a.`electorate_id` =12
+           set d.`address_id` = a.id
+            where d.`address` = CONCAT(a.`flat_no`,"/",a.`house_no`,a.`house_alpha`,  " ", a.`street`) and a.`electorate_id` =12
         */
+
+        /*
+         * update delivery_route d, addresses a
+         *  set a.`route_id` = d.`route_id`
+         *  where d.`address_id` = a.`id` and a.`electorate_id` =12
+         */
+
+        /*
+         * update addresses a
+         * set a.`house_alpha` = NULL where a.`house_alpha` = '';
+         * update addresses a
+         * set a.`flat_no` = NULL where a.`flat_no` = ''
+         */
 
 
         DB::table('addresses')->truncate();

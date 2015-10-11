@@ -2,31 +2,20 @@
 <html lang="en">
 <head>
 	<!-- Latest compiled and minified CSS -->
-	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
-
-    <!-- Optional theme -->
+	<!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap-theme.min.css">
-
-	<!-- Select2 -->
+    {!! HTML::style('css/style.css') !!}
+    <!-- Select2 -->
 	<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/select2/4.0.0-rc.2/css/select2.min.css">
-
     <link rel="stylesheet" href="//cdn.datatables.net/plug-ins/1.10.7/integration/bootstrap/3/dataTables.bootstrap.css">
-
     <meta charset="UTF-8">
 	<title>inRoll v1.2</title>
-	<style>
-		body{
-			padding-bottom: 50px;
-		}
-		table.floatThead-table {
-            border-top: none;
-            border-bottom: none;
-            background-color: #FFF;
-        }
-	</style>
+
 
 </head>
 <body>
+
 	<nav class="navbar navbar-inverse" role="navigation">
       <div class="container-fluid">
         <!-- Brand and toggle get grouped for better mobile display -->
@@ -85,24 +74,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/floatthead/1.2.10/jquery.floatThead.min.js"></script>
 
 
-    <script>
-            $('div.alert').not('.alert-important').delay(3000).slideUp(300);
-    </script>
-
-    <script>
-        $('#selectElectorate').select2({
-            placeholder: 'Choose Electorate(s)'
-        });
-        $('#selectArea').select2({
-            placeholder: 'Choose Area Units(s)'
-        });
-        $('#selectOccupation').select2({
-            placeholder: 'Choose Occupation(s)'
-         });
-    </script>
-    <script>
-        $("table.table").floatThead()
-    </script>
+    {!! HTML::script('scripts/functions.js') !!}
 
     @yield('footer')
 </body>

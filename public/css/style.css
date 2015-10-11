@@ -1,0 +1,38 @@
+body{
+    padding-bottom: 50px;
+}
+table.floatThead-table {
+    border-top: none;
+    border-bottom: none;
+    background-color: #FFF;
+}
+
+.voffset  { margin-top: 2px; }
+.voffset1 { margin-top: 5px; }
+.voffset2 { margin-top: 10px; }
+.voffset3 { margin-top: 15px; }
+.voffset4 { margin-top: 30px; }
+.voffset5 { margin-top: 40px; }
+.voffset6 { margin-top: 60px; }
+.voffset7 { margin-top: 80px; }
+.voffset8 { margin-top: 100px; }
+.voffset9 { margin-top: 150px; }
+
+
+
+.add_question {
+    background: #F65A5B;
+    color: #fff;
+    cursor: pointer;
+    display: inline-block;
+    font-size: 15px;
+    line-height: 40px;
+    min-width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    margin: 0 -30px 0 40px;
+    text-align: center;
+    font-weight: 200;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+    transition: background 500ms;
+}

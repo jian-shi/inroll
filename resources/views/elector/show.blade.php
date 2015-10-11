@@ -13,11 +13,13 @@
 
 							<h3 class="bg-info">GNA/Hostile</h3>
 							<div class="form-group">
-								<div class="col-sm-4"><label>{!! isset($elector->relation)?Form::hidden($elector->id.'[is_gna]',0): null !!}<input type="checkbox" name={{$elector->id.'[is_gna]'}} value="1" {{isset($elector->relation->is_gna) && $elector->relation->is_gna==1?'checked=checked': 'false'}}>
-                                                                             Gone No Address</label></div>
-								<div class="col-sm-4"><label>{!! isset($elector->relation)?Form::hidden($elector->id.'[is_hostile]',0): null !!}<input type="checkbox" name={{$elector->id.'[is_hostile]'}} value="1" {{isset($elector->relation->is_hostile) && $elector->relation->is_hostile==1?'checked=checked': 'false'}}>
-                                                                             Hostile</label></div>
-								<div class="col-sm-4">{!! Form::submit('Submit', ['class'=> 'btn btn-primary']) !!}</div>
+
+							    <div class="col-sm-3"><label>Relationship</label>{!! Form::select($elector->id.'[relation]',[null=>'?','friendly'=>'Friendly', 'persuadable'=>'Persuadable', 'hostile'=>'Hostile', 'candidate_vote'=>'Candidate Vote','home_unclear'=>'Home/ Unclear','not_home'=>'Visited Not Home'], isset($elector->relation->relation)?$elector->relation->relation:null, ['class' =>'form-control','id'=>'input-relation']) !!}</div>
+                                <div class="col-sm-3"><label>Party Vote</label>{!! Form::select($elector->id.'[party_vote]',[null=>'N/A','act'=>'ACT', 'national'=>'National', 'Labour'=>'Labour', 'conservative'=>'Conservative','nzfirst'=>'NzFirst','green'=>'Green','other'=>'Other'], isset($elector->relation->party_vote)?$elector->relation->party_vote:null, ['class' =>'form-control','id'=>'input-party']) !!}</div>
+                                <div class="col-sm-3"><label>GNA</label> {!! Form::hidden($elector->id.'[is_gna]', 0) !!}<input type="checkbox" name={{$elector->id.'[is_gna]'}} value="1" {{isset($elector->relation->is_gna) && $elector->relation->is_gna==1?'checked=checked': 'false'}}></div>
+
+
+								<div class="col-sm-3">{!! Form::submit('Submit', ['class'=> 'btn btn-primary']) !!}</div>
 							</div>
 
 							<h3 class="bg-info">Personal Details</h3>

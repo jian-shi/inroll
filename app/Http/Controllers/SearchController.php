@@ -177,6 +177,7 @@ class SearchController extends Controller {
                 $query->whereNull('relation.relation')
                     ->orWhere('relation.relation', "hostile");
             })
+            ->where('electors.maori_descent', '!=', 'Y')
             ->groupBy($group)
             ->orderBy(DB::raw('area_unit,street,MOD(addresses.`house_no`,2),CAST(`addresses`.`house_no` AS DECIMAL)'))
             ->get();
