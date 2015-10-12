@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" ng-app = "myApp">
 <head>
 	<!-- Latest compiled and minified CSS -->
 	<!-- Latest compiled and minified CSS -->
@@ -9,12 +9,22 @@
     <!-- Select2 -->
 	<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/select2/4.0.0-rc.2/css/select2.min.css">
     <link rel="stylesheet" href="//cdn.datatables.net/plug-ins/1.10.7/integration/bootstrap/3/dataTables.bootstrap.css">
+    <script type='text/javascript' src="//ajax.googleapis.com/ajax/libs/angularjs/1.4.7/angular.min.js"></script>
+    {!! HTML::script('js/app.js')!!}
+    {!! HTML::script('js/controllers/mainCtrl.js')!!}
+
     <meta charset="UTF-8">
+
 	<title>inRoll v1.2</title>
 
 
 </head>
 <body>
+<input type="text" ng-model="yourName" placeholder="Enter a name here">
+                                           <hr>
+                                           <h1>Hello <% yourName %>!</h1>
+
+
 
 	<nav class="navbar navbar-inverse" role="navigation">
       <div class="container-fluid">
