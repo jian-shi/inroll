@@ -14,19 +14,50 @@
             </div>
         </div>
 
-        <div class="row" ng-controller="MyCtrl">
-            <div class="form-group">
-            <h3>Questions</h3>
-                <div class="col-sm-12">
-                    <form class="form-inline" ng-app="myApp" ng-controller="MyCtrl">
+        {{--<div class="row">--}}
+            {{--<div class="form-group">--}}
+            {{--<h3>Questions</h3>--}}
+                {{--<div class="col-sm-12">--}}
+                    {{--<form class="form-inline" ng-controller="mainCtrl">--}}
+                        {{--[<span ng-repeat="input in inputs">"<%input.value%>"</span>]--}}
+                        {{--<div ng-repeat="input in inputs">--}}
+                            {{--<input type="text" ng-model="input.value" class="form-control voffset2"/>--}}
+                            {{--<button class = 'btn btn-primary form-control voffset2' ng-click="removeInput($index)">-</button>--}}
+                        {{--</div>--}}
+                        {{--<button class = 'btn btn-primary form-control voffset2' ng-click="addInput()">ADD</button>--}}
+                    {{--</form>--}}
+                {{--</div>--}}
+            {{--</div>--}}
+        {{--</div>--}}
+        <div class="row">
+        <h3 class="bg-info">Submit Questions</h3>
+            <div class="col-md-12" ng-controller="MainController">
+                <form ng-submit="submitQuestion()"> <!-- ng-submit will disable the default form action and use our function -->
+                    <!-- AUTHOR -->
 
-                        [<span ng-repeat="input in inputs">"<%input.value%>"</span>]
-                        <div ng-repeat="input in inputs">
-                            <input type="text" ng-model="input.value" class="form-control voffset2"/>
-                            <button class = 'btn btn-primary form-control voffset2' ng-click="removeInput($index)">-</button>
-                        </div>
-                        <button class = 'btn btn-primary form-control voffset2' ng-click="addInput()">ADD</button>
-                    </form>
+
+                    <!-- COMMENT TEXT -->
+                    <div class="form-group">
+                        <input Type="hidden" ng-init='questionData.survey_id={{$survey->id}}' ng-model="questionData.survey_id"/>
+                        <input type="text" class="form-control input-lg" name="question" ng-model="questionData.text" placeholder="Add a survey question">
+                    </div>
+
+                    <!-- SUBMIT BUTTON -->
+                    <div class="form-group text-right">
+                        <button type="submit" class="btn btn-primary btn-lg">Submit</button>
+                    </div>
+                </form>
+
+                <!-- LOADING ICON =============================================== -->
+                <!-- show loading icon if the loading variable is set to true -->
+                <p class="text-center" ng-show="loading"><span class="fa fa-meh-o fa-5x fa-spin"></span></p>
+
+                <!-- THE COMMENTS =============================================== -->
+                <!-- hide these comments if the loading variable is true -->
+                <div class="question" ng-hide="loading" ng-repeat="question in questions">
+                    <h3>Question #<% question.id %></h3>
+                    <p><% question.text %></p>
+                    <p><a href="#" ng-click="deleteQuestion(question.id)" class="text-muted">Delete</a></p>
                 </div>
             </div>
         </div>

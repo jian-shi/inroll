@@ -11,7 +11,8 @@
     <link rel="stylesheet" href="//cdn.datatables.net/plug-ins/1.10.7/integration/bootstrap/3/dataTables.bootstrap.css">
     <script type='text/javascript' src="//ajax.googleapis.com/ajax/libs/angularjs/1.4.7/angular.min.js"></script>
     {!! HTML::script('js/app.js')!!}
-    {!! HTML::script('js/controllers/mainCtrl.js')!!}
+    {!! HTML::script('js/controllers/questionCtrl.js')!!}
+    {!! HTML::script('js/services/questionService.js')!!}
 
     <meta charset="UTF-8">
 
@@ -19,14 +20,8 @@
 
 
 </head>
-<body>
-<input type="text" ng-model="yourName" placeholder="Enter a name here">
-                                           <hr>
-                                           <h1>Hello <% yourName %>!</h1>
-
-
-
-	<nav class="navbar navbar-inverse" role="navigation">
+<body >
+    <nav class="navbar navbar-inverse" role="navigation">
       <div class="container-fluid">
         <!-- Brand and toggle get grouped for better mobile display -->
         <div class="navbar-header">

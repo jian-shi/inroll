@@ -24,6 +24,13 @@ Route::bind('elector', function($id){
     return App\Elector::where('id', $id)->first();
 });
 
+Route::group(array('prefix' => 'api'), function() {
+    Route::resource('questions', 'QuestionController',
+        array('only' => array('index', 'store', 'destroy')));
+
+});
+
+
 //Route::bind('survey', function($id){
 //    return App\Survey::where('id', $id)->first();
 //});
@@ -41,7 +48,6 @@ App::bind('App\Inroll\Repositories\AddressRepositoryInterface','App\Inroll\Repos
 
 Route::get('Request::url()/export', ['uses' => 'SearchController@export', 'as' => 'export']);
 Route::post('survey', 'SurveyController@store');
-
 
 $router->resource('elector', 'ElectorController',
     ['names'=>[

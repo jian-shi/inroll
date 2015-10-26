@@ -133,7 +133,7 @@ class SearchController extends Controller {
         }
         else {
 
-            $dbSelect = 'CONCAT(CONCAT_ws("", CONCAT_ws("/",`addresses`.`flat_no`,`addresses`.`house_no`),`addresses`.`house_alpha`), " ",`addresses`.`street`) as address, addresses.street as street, addresses.suburb_town as address2,`addresses`.`post_code` as postalCode, `census`.`areaunit_code` as area_unit,`addresses`.`city` as city, GROUP_CONCAT(CONCAT(SUBSTRING(`electors`.`forenames` from 1 for 1)," ",`electors`.`surname`) SEPARATOR ", ")as name,`addresses`.`id` as addressId, `addresses`.`route_id` as route_id';
+            $dbSelect = 'CONCAT(CONCAT_ws("", CONCAT_ws("/",`addresses`.`flat_no`,`addresses`.`house_no`),`addresses`.`house_alpha`), " ",`addresses`.`street`) as address, addresses.flat_no as flat, addresses.street as street, addresses.suburb_town as address2,`addresses`.`post_code` as postalCode, `census`.`areaunit_code` as area_unit,`addresses`.`city` as city, GROUP_CONCAT(CONCAT(SUBSTRING(`electors`.`forenames` from 1 for 1)," ",`electors`.`surname`) SEPARATOR ", ")as name,`addresses`.`id` as addressId, `addresses`.`route_id` as route_id';
             $group = 'addressId';
         }
         $data = DB::table('electors')
