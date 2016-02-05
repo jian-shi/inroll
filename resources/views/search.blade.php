@@ -13,9 +13,14 @@
                     <div class="form-group">
                         <label for="input-area_unit" class="col-sm-2 control-label">Area Unit</label>
                         <div class="col-sm-4">{!! Form::select('area_unit[]', $areaunits, null, ['id'=> 'selectArea','class' =>'form-control','multiple']) !!}</div>
+                    </div>
+                    <div class="form-group">
                         <label for="input-deprivation" class="col-sm-2 control-label">Deprivation</label>
-                        <div class="col-sm-2">{!! Form::selectRange('dep_from',1,10, 1, ['class' =>'form-control', 'id'=>'input-deprivation']) !!}</div>
-                        <div class="col-sm-2">{!! Form::selectRange('dep_to',1,10, 10, ['class' =>'form-control']) !!}</div>
+
+                        <div class="col-sm-4">{!! Form::selectRange('dep_from',1,10, 1, ['class' =>'form-control', 'id'=>'input-deprivation']) !!}</div>
+
+                        <div class="col-sm-4">{!! Form::selectRange('dep_to',1,10, 10, ['class' =>'form-control', 'id'=>'input-deprivation_to']) !!}</div>
+
                     </div>
 
                     <h3 class="bg-info">Target Electors</h3>
@@ -29,10 +34,11 @@
 
                      <div class="form-group">
                          <label for="input-occupation" class="col-sm-2 control-label">Occupation</label>
-                         <div class="col-sm-6">{!! Form::select('occupation[]',['1'=>'Cat.1'], null, ['id'=>'selectOccupation', 'class' =>'form-control','multiple']) !!}</div>
+                         <div class="col-sm-6">{!! Form::select('occupation[]', $occupation_category, null, ['id'=>'selectOccupation', 'class' =>'form-control','multiple']) !!}</div>
                      </div>
-
+                @if ($count_elector>0)
                 <h3 class="bg-info"> Found {{$count_elector}} Electors, {{$count_address}} Households</h3>
+                @endif
                 {{--{!! Form::submit('Search',  ['class'=> 'btn btn-info btn-lg pull-left'])!!}--}}
                 <div class="col-sm-2"><button type="submit" class="btn btn-primary btn-md"><span class="glyphicon glyphicon-search"></span> Search</button></div>
 

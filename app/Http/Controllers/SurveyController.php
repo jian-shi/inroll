@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Survey;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Input;
 
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
@@ -18,12 +19,6 @@ class SurveyController extends Controller
     public function index()
     {
         return response()->json(Survey::get());
-//        if ($id == null) {
-//            $surveys = Survey::orderBy('id', 'desc')->get();
-//            return View('survey.index', compact('surveys'));
-//        } else {
-//            return $this->show($id);
-//        }
     }
 
     /**
@@ -41,31 +36,17 @@ class SurveyController extends Controller
      *
      * @return Response
      */
-    public function store(Request $request)
+    public function store()
     {
-        Question::create(array(
-        'description' => Input::get('description'),
-        'start_date' => Input::get('start_date'),
-        'end_date' => Input::get('end_date'),
-        'is_open' => Input::get('is_open'),
-        'number_of_questions' => Input::get('number_of_questions')
-        ));
-        return response()->json(array('success' => true));
-//        $start_date = date("Y-m-d", strtotime($request->input('start_date')));
-//        $end_date = date("Y-m-d", strtotime($request->input('end_date')));
-//
-//
-//        $survey = new Survey;
-//        $survey-> description = $request->input('description');
-//        $survey-> start_date = $start_date;
-//        $survey-> end_date = $end_date;
-//        $survey-> is_open = $request->input('is_open');
-//        $survey-> number_of_questions = $request->input('number_of_questions');
-//        $survey->save();
+        $survey = new Survey();
+        $survey->description = Input::get('description');
+        $survey->is_open = Input::get('is_open');
 
+        $survey->save();
 
-//        return 'Survey successfully created with id ' . $survey->id;
+        return response()->json($survey);
     }
+
 
     /**
      * Display the specified resource.
@@ -117,6 +98,6 @@ class SurveyController extends Controller
     public function destroy($id)
     {
         Survey::destroy($id);
-        return Response::json(array('success' => true));
+        return response()->json($id);
     }
 }

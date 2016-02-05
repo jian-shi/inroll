@@ -10,10 +10,6 @@
 |
 */
 
-//Route::get('/', function () {
-//    return view('welcome');
-//});
-
 
 
 Route::get('/', 'SearchController@index');
@@ -23,17 +19,26 @@ Route::get('/phone', 'PhoneController@index');
 Route::bind('elector', function($id){
     return App\Elector::where('id', $id)->first();
 });
+Route::get('/surveys', function() {
+    return View::make('index');
+});
 
-Route::group(array('prefix' => 'api'), function() {
-    Route::resource('questions', 'QuestionController',
-        array('only' => array('index', 'store', 'destroy')));
+Route::get('/survey/{id}', function() {
+    return View::make('index');
+});
+
+Route::get('/survey/{id}/survey-record', function() {
+    return View::make('index');
+});
+
+Route::group(['prefix' => 'api'], function() {
+    Route::resource('surveys','SurveyController');
+    Route::resource('questions','QuestionController');
+    Route::resource('answers','AnswerController');
+    Route::get('survey/{id}/questions', 'QuestionController@index');
 
 });
 
-
-//Route::bind('survey', function($id){
-//    return App\Survey::where('id', $id)->first();
-//});
 
 Route::bind('address', function($id){
     return App\Address::where('id', $id)->first();
@@ -47,7 +52,7 @@ App::bind('App\Inroll\Repositories\ElectorRepositoryInterface','App\Inroll\Repos
 App::bind('App\Inroll\Repositories\AddressRepositoryInterface','App\Inroll\Repositories\AddressRepository');
 
 Route::get('Request::url()/export', ['uses' => 'SearchController@export', 'as' => 'export']);
-Route::post('survey', 'SurveyController@store');
+
 
 $router->resource('elector', 'ElectorController',
     ['names'=>[
@@ -57,16 +62,6 @@ $router->resource('elector', 'ElectorController',
         'update'  => 'elector_path' ],
         'only'=>['index','show','edit','update']
 
-    ]);
-
-$router->resource('survey', 'SurveyController',
-    ['names'=>[
-        'index' => 'survey_path',
-        'show'  => 'survey_path',
-        'edit'  => 'survey_path',
-        'update'  => 'survey_path',
-        'create' => 'survey_path'],
-        'only'=>['index','show','edit','update','create']
     ]);
 
 $router->resource('address', 'AddressController',
@@ -96,23 +91,23 @@ $router->resource('phone', 'PhoneController',
     ]);
 
 
-//Route::controllers([
-//    'auth' => 'Auth\AuthController',
-//    'password' => 'Auth\PasswordController',
-//]);
-
-// Authentication routes...
+////Route::controllers([
+////    'auth' => 'Auth\AuthController',
+////    'password' => 'Auth\PasswordController',
+////]);
+//
+//// Authentication routes...
 Route::get('auth/login', 'Auth\AuthController@getLogin');
 Route::post('auth/login', 'Auth\AuthController@postLogin');
 //Route::get('auth/register', 'Auth\AuthController@getRegister');
 //Route::post('auth/register', 'Auth\AuthController@postRegister');
 Route::get('auth/logout', 'Auth\AuthController@getLogout');
 
-///*
-// * Display SQL Queries
-// */
-//Event::listen('illuminate.query', function($sql)
-//{
-//    var_dump($sql);
-//});
+/////*
+//// * Display SQL Queries
+//// */
+////Event::listen('illuminate.query', function($sql)
+////{
+////    var_dump($sql);
+////});
 

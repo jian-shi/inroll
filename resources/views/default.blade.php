@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" ng-app = "myApp">
+<html lang="en" ng-app = "app">
 <head>
 	<!-- Latest compiled and minified CSS -->
 	<!-- Latest compiled and minified CSS -->
@@ -10,10 +10,12 @@
 	<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/select2/4.0.0-rc.2/css/select2.min.css">
     <link rel="stylesheet" href="//cdn.datatables.net/plug-ins/1.10.7/integration/bootstrap/3/dataTables.bootstrap.css">
     <script type='text/javascript' src="//ajax.googleapis.com/ajax/libs/angularjs/1.4.7/angular.min.js"></script>
+    <script type='text/javascript' src="http://code.angularjs.org/1.4.7/angular-route.js"></script>
     {!! HTML::script('js/app.js')!!}
-    {!! HTML::script('js/controllers/questionCtrl.js')!!}
-    {!! HTML::script('js/services/questionService.js')!!}
-
+    {!! HTML::script('js/controllers/surveysController.js')!!}
+    {!! HTML::script('js/services/surveyService.js')!!}
+    {!! HTML::script('js/controllers/surveyController.js')!!}
+    {!! HTML::script('js/controllers/surveyRecordController.js')!!}
     <meta charset="UTF-8">
 
 	<title>inRoll v1.2</title>
@@ -41,6 +43,7 @@
             <li><a href="/address/">Address</a></li>
             <li><a href="/elector/">Elector</a></li>
             <li><a href="/phone/">Phone</a></li>
+            <li><a href="/surveys/">Survey</a></li>
             <li class="dropdown">
               <a href="#" class="dropdown-toggle" data-toggle="dropdown">Hi, {{ Auth::user()->name ?: '' }}  <span class="caret"></span></a>
               <ul class="dropdown-menu" role="menu">
@@ -67,8 +70,12 @@
         	            @endforeach
         	        </div>
         @endif
+
 		@yield('content')
+		<div ng-view></div>
 	</div>
+
+
 
 	<script src="http://code.jquery.com/jquery.js"></script>
 	<!-- Latest compiled and minified JavaScript -->

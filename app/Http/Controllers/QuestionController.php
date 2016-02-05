@@ -17,11 +17,16 @@ class QuestionController extends Controller
      *
      * @return Response
      */
-    public function index()
+    public function index($surveyId=null)
     {
-        return response()->json(Question::get());
+        $questions = $this->getQuestions($surveyId);
+
+        return response()->json($questions);
     }
 
+    public function getQuestions($surveyId){
+        return $surveyId?Survey::findOrFail($surveyId)->questions:Question::all();
+    }
 
     /**
      * Store a newly created resource in storage.
@@ -30,11 +35,14 @@ class QuestionController extends Controller
      */
     public function store()
     {
-        Question::create(array(
-            'text' => Input::get('text'),
-            'survey_id' => Input::get('survey_id')
-        ));
-        return response()->json(array('success' => true));
+
+        $question = new Question();
+        $question->text = Input::get('text');
+        $question->survey_Id = Input::get('surveyId');
+        $question->order = Input::get('order');
+        $question->save();
+
+        return response()->json($question);
     }
 
 
@@ -47,6 +55,7 @@ class QuestionController extends Controller
     public function destroy($id)
     {
         Question::destroy($id);
-        return Response::json(array('success' => true));
+        return response()->json($id);
     }
+
 }

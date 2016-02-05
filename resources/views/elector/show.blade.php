@@ -18,7 +18,6 @@
                                 <div class="col-sm-3"><label>Party Vote</label>{!! Form::select($elector->id.'[party_vote]',[null=>'N/A','act'=>'ACT', 'national'=>'National', 'Labour'=>'Labour', 'conservative'=>'Conservative','nzfirst'=>'NzFirst','green'=>'Green','other'=>'Other'], isset($elector->relation->party_vote)?$elector->relation->party_vote:null, ['class' =>'form-control','id'=>'input-party']) !!}</div>
                                 <div class="col-sm-3"><label>GNA</label> {!! Form::hidden($elector->id.'[is_gna]', 0) !!}<input type="checkbox" name={{$elector->id.'[is_gna]'}} value="1" {{isset($elector->relation->is_gna) && $elector->relation->is_gna==1?'checked=checked': 'false'}}></div>
 
-
 								<div class="col-sm-3">{!! Form::submit('Submit', ['class'=> 'btn btn-primary']) !!}</div>
 							</div>
 
@@ -28,19 +27,20 @@
      							<div class="col-sm-6"><label>First Name</label><input type="text" class="form-control" value="{{$elector->forenames}}"></div>
    	 						</div>
    	 						<div class="form-group">
-      							<div class="col-sm-4"><label>Title</label><input type="text" class="form-control" value="{{$elector->title}}"></div>
-     							<div class="col-sm-4"><label>Age Range</label><input type="text" class="form-control" value="{{ (date('Y') - $elector->age->age_to). "~" . (date('Y') - $elector->age->age_from)  }}"></div>
-   	 							<div class="col-sm-4"><label>Maori Descent</label><input type="text" class="form-control" value="{{$elector->maori_descent}}"></div>
+      							<div class="col-sm-3"><label>Title</label><input type="text" class="form-control" value="{{$elector->title}}"></div>
+     							<div class="col-sm-3"><label>Age Range</label><input type="text" class="form-control" value="{{ (date('Y') - $elector->age->age_to). "~" . (date('Y') - $elector->age->age_from)  }}"></div>
+   	 							<div class="col-sm-3"><label>Occupation</label><input type="text" class="form-control" value="{{$elector->occupation_code or "Unkown"}}"></div>
+   	 							<div class="col-sm-3"><label>Maori Descent</label><input type="text" class="form-control" value="{{$elector->maori_descent}}"></div>
    	 						</div>
    	 						<h3 class="bg-info">Residential Address Details</h3>
     						<div class="form-group">
       							<label class="col-sm-12" > Street Address</label>
-      							    <div class="col-sm-12"><input type="text" class="form-control" id="text" value="{{$elector->address->flat_no." ".$elector->address->house_no." ". $elector->address->house_alpha. " ". $elector->address->street}}"></div>
+      							    <div class="col-sm-12"><input type="text" class="form-control" id="text" value="{{$elector->address->flat_no or ''}}{{$elector->address->house_no}}{{$elector->address->house_alpha}} {{ $elector->address->street}}"></div>
 
     						</div>
     						<div class="form-group">
       							<div class="col-sm-6"><label>Suburb, Town or Rd </label><input type="text" class="form-control" value="{{$elector->address->suburb_town}}"></div>
-     							<div class="col-sm-6"><label>City, Postcode</label><input type="text" class="form-control" value="{{$elector->address->city}} , {{$elector->address->post_code}}"></div>
+     							<div class="col-sm-6"><label>City, Postcode</label><input type="text" class="form-control" value="{{$elector->city or NULL}}  {{$elector->address->post_code}}"></div>
    	 						</div>
     						<h3 class="bg-info">Contact Details</h3>
     						<div class="form-group">

@@ -1,0 +1,27 @@
+<div class="col-sm-12">
+<h3 class="bg-info">Survey Info</h3>
+    <p>Survey ID: <strong>{{survey.id}}</strong></p>
+    <p>Survey Description: <strong>{{survey.description}}</strong></p>
+    <a href="/survey/{{ survey.id }}/survey-record">[Record Answers]</a>
+<h4> Question List</h4>
+        <table class="table table-striped table-bordered">
+            <tbody>
+            <tr>
+                <th>ID</th>
+                <th>Description</th>
+
+            </tr>
+            <tr ng-repeat="question in questions|orderBy: 'order'">
+                <td>{{question.order}}</td>
+                <td><a ng-click='removeQuestion(question.id)'>[-]</a> {{question.text}}</td>
+
+            </tr>
+            </tbody>
+            <tfoot>
+                <tr>
+                    <td><input ng-model="newQuestion.order" style="width: 9%"></td>
+                    <td><input type="text" ng-model="newQuestion.text" style="width: 170px"><a ng-click="addQuestion()">[+]</a></td>
+                </tr>
+            </tfoot>
+
+        </table>

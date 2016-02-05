@@ -90,6 +90,15 @@ class DbManageController extends Controller
          * set a.`flat_no` = NULL where a.`flat_no` = ''
          */
 
+        /*
+         * update electors e set e.`ethnic` = 'Chinese' where e.`surname` in (select china from surnames)
+         * update electors e set e.`ethnic` = NULL where e.`forenames` in (select forename from forenames) and e.`ethnic`='Chinese'
+         *
+         */
+
+        /*
+         * update electors e, occupation_category o set e.`occupation_code` =o.`category` where e.`occupation` = o.`occupation`
+         */
 
         DB::table('addresses')->truncate();
         try{

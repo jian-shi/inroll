@@ -1,26 +1,37 @@
-angular.module('surveyService', [])
-    .factory('Survey', function($http) {
+app.factory('Survey', function($http) {
         return {
             // get all the surveys
-            get : function() {
+            getSurveys : function getSurveys() {
                 return $http.get('/api/surveys');
             },
 
-            // save a survey (pass in survey data)
-            save : function(surveyData) {
-                console.log(surveyData);
-                return $http({
-                    method: 'POST',
-                    url: '/api/surveys',
-                    headers: { 'Content-Type' : 'application/x-www-form-urlencoded' },
-                    data: $.param(surveyData)
-                });
-
+            getSurvey : function getSurvey(id) {
+                return $http.get('/api/surveys/'+id);
             },
 
-            // destroy a survey
-            destroy : function(id) {
+            addSurvey : function addSurvey(data) {
+                return $http.post('/api/surveys/',data);
+            },
+
+            removeSurvey : function removeSurvey(id) {
                 return $http.delete('/api/surveys/' + id);
+            },
+
+            getQuestions : function getQuestions(id) {
+                return $http.get('/api/survey/'+id+'/questions');
+            },
+
+            addQuestion: function addQuestion(data) {
+                return $http.post('/api/questions', data);
+            },
+
+            removeQuestion: function removeQuestion(id) {
+                return $http.delete('/api/questions/'+ id);
+            },
+
+            addSurveyAnswer: function addAnswer(data) {
+                console.log(data);
+                return $http.post('/api/answers', data);
             }
         }
 

@@ -8,6 +8,7 @@ use App\AreaUnit;
 use Illuminate\Support\Facades\DB;
 use Maatwebsite\Excel\Facades\Excel;
 use App\Electorate;
+use App\Occupation;
 class SearchController extends Controller {
 
     /*
@@ -48,10 +49,12 @@ class SearchController extends Controller {
         $count_elector = "0";
         $count_address = "0";}
         $age_lists = Age::lists('age_from', 'id');
+        $occupation_lists = Occupation::lists('category','category');
+
         $electorate_lists = Electorate::lists('electorate', 'id');
         $area_lists = AreaUnit::selectRaw('CONCAT(areaunit_code,"-", areaunit_description) as AreaName, areaunit_code')->orderBy('areaunit_code')->lists('AreaName', 'areaunit_code');
 
-        return view('search')->with('age_range',$age_lists)->with('count_elector', $count_elector)->with('count_address', $count_address)->with('electorates',$electorate_lists)->with('areaunits',$area_lists);
+        return view('search')->with('occupation_category',$occupation_lists)->with('age_range',$age_lists)->with('count_elector', $count_elector)->with('count_address', $count_address)->with('electorates',$electorate_lists)->with('areaunits',$area_lists);
     }
 
     public function getQueryResult()
@@ -60,7 +63,6 @@ class SearchController extends Controller {
         $ethnic= Input::get ('ethnic');
         $area_units= Input::get ('area_unit');
         $occupation= Input::get ('occupation');
-
 
             $match =[];
             if ($ethnic != null){
@@ -88,8 +90,6 @@ class SearchController extends Controller {
 
                 -> where ($match)
                 -> where (function($query) use ($occupation, $area_units, $electorates){
-                    $query->where('gna', 0);
-                    $query-> where ('hostile', 0);
                     if($occupation)
                         $query->whereIn('electors.occupation_code', $occupation);
                     if($area_units){
@@ -128,12 +128,12 @@ class SearchController extends Controller {
 
         if ($export=='door') {
 
-            $dbSelect = 'CONCAT(CONCAT_ws("", CONCAT_ws("/",`addresses`.`flat_no`,`addresses`.`house_no`),`addresses`.`house_alpha`), " ",`addresses`.`street`) as address,`electors`.`title` as title, CONCAT(`age`.`age_from`,"~",`age`.`age_to`) as age, electors.occupation as occupation, addresses.street as street, addresses.suburb_town as address2,`addresses`.`post_code` as postalCode, `census`.`areaunit_code` as area_unit,`addresses`.`city` as city, CONCAT(`electors`.`forenames`," ",`electors`.`surname`) as name, `addresses`.`id` as addressId, `addresses`.`route_id` as route_id';
+            $dbSelect = 'CONCAT(CONCAT_WS(" ", CONCAT_WS("/",`addresses`.`flat_no`,`addresses`.`house_no`),`addresses`.`house_alpha`), " ",`addresses`.`street`) as address,`electors`.`title` as title, CONCAT(`age`.`age_from`,"~",`age`.`age_to`) as age, electors.occupation as occupation, addresses.street as street, addresses.suburb_town as address2,`addresses`.`post_code` as postalCode, `census`.`areaunit_code` as area_unit,`addresses`.`city` as city, CONCAT(`electors`.`forenames`," ",`electors`.`surname`) as name, `addresses`.`id` as addressId, `addresses`.`route_id` as route_id';
             $group = ['name','addressId'];
         }
         else {
 
-            $dbSelect = 'CONCAT(CONCAT_ws("", CONCAT_ws("/",`addresses`.`flat_no`,`addresses`.`house_no`),`addresses`.`house_alpha`), " ",`addresses`.`street`) as address, addresses.flat_no as flat, addresses.street as street, addresses.suburb_town as address2,`addresses`.`post_code` as postalCode, `census`.`areaunit_code` as area_unit,`addresses`.`city` as city, GROUP_CONCAT(CONCAT(SUBSTRING(`electors`.`forenames` from 1 for 1)," ",`electors`.`surname`) SEPARATOR ", ")as name,`addresses`.`id` as addressId, `addresses`.`route_id` as route_id';
+            $dbSelect = 'CONCAT(CONCAT_WS(" ", CONCAT_WS("/",`addresses`.`flat_no`,`addresses`.`house_no`),`addresses`.`house_alpha`), " ",`addresses`.`street`) as address, addresses.flat_no as flat, addresses.street as street, addresses.suburb_town as address2,`addresses`.`post_code` as postalCode, `census`.`areaunit_code` as area_unit,`addresses`.`city` as city, GROUP_CONCAT(CONCAT(SUBSTRING(`electors`.`forenames` from 1 for 1)," ",`electors`.`surname`) SEPARATOR ", ")as name,`addresses`.`id` as addressId, `addresses`.`route_id` as route_id';
             $group = 'addressId';
         }
         $data = DB::table('electors')
@@ -155,8 +155,6 @@ class SearchController extends Controller {
             ->select(DB::raw($dbSelect))
             ->where($match)
             ->where(function($query) use ($occupation, $area_units, $electorates){
-                $query->where('gna', 0);
-                $query-> where ('hostile', 0);
                 if($occupation)
                     $query->whereIn('electors.occupation_code', $occupation);
                 if($area_units){
@@ -175,7 +173,7 @@ class SearchController extends Controller {
             })
             ->where(function($query){
                 $query->whereNull('relation.relation')
-                    ->orWhere('relation.relation', "hostile");
+                    ->orWhere('relation.relation','<>', "hostile");
             })
             ->where('electors.maori_descent', '!=', 'Y')
             ->groupBy($group)
@@ -185,9 +183,7 @@ class SearchController extends Controller {
 
         Excel::create('Electorate', function($excel) use($data) {
             $excel->sheet('Results', function($sheet) use($data){
-
                 $sheet->fromModel($data);
-
             });
 
         })->export('csv');
