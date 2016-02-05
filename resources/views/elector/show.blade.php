@@ -35,7 +35,7 @@
    	 						<h3 class="bg-info">Residential Address Details</h3>
     						<div class="form-group">
       							<label class="col-sm-12" > Street Address</label>
-      							    <div class="col-sm-12"><input type="text" class="form-control" id="text" value="{{$elector->address->flat_no or ''}}{{$elector->address->house_no}}{{$elector->address->house_alpha}} {{ $elector->address->street}}"></div>
+      							    <div class="col-sm-12"><input type="text" class="form-control" id="text" value="{{$elector->address->flat_no or ''}} {{$elector->address->house_no}}{{$elector->address->house_alpha}} {{ $elector->address->street}}"></div>
 
     						</div>
     						<div class="form-group">
