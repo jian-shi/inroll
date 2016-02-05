@@ -12,7 +12,7 @@
 
                     <div class="form-group">
                         <label for="input-area_unit" class="col-sm-2 control-label">Area Unit</label>
-                        <div class="col-sm-4">{!! Form::select('area_unit[]', $areaunits, null, ['id'=> 'selectArea','class' =>'form-control','multiple']) !!}</div>
+                        <div class="col-sm-10">{!! Form::select('area_unit[]', $areaunits, null, ['id'=> 'selectArea','class' =>'form-control','multiple']) !!}</div>
                     </div>
                     <div class="form-group">
                         <label for="input-deprivation" class="col-sm-2 control-label">Deprivation</label>
