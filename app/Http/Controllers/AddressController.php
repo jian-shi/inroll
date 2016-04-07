@@ -31,6 +31,7 @@ class AddressController extends Controller {
     public function query(Request $request)
     {
         $request->flash();
+        $addressId = $request->get('addressId');
         $electorate=$request->get('electorate');
         $street=$request->get('street');
         $match['street'] = $street;

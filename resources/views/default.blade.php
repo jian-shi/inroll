@@ -9,8 +9,10 @@
     <!-- Select2 -->
 	<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/select2/4.0.0-rc.2/css/select2.min.css">
     <link rel="stylesheet" href="//cdn.datatables.net/plug-ins/1.10.7/integration/bootstrap/3/dataTables.bootstrap.css">
-    <script type='text/javascript' src="//ajax.googleapis.com/ajax/libs/angularjs/1.4.7/angular.min.js"></script>
-    <script type='text/javascript' src="http://code.angularjs.org/1.4.7/angular-route.js"></script>
+    <script type='text/javascript' src="//ajax.googleapis.com/ajax/libs/angularjs/1.5.0/angular.min.js"></script>
+    <script type='text/javascript' src="http://code.angularjs.org/1.5.0/angular-route.js"></script>
+    <link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet/v0.7.7/leaflet.css" />
+
     {!! HTML::script('js/app.js')!!}
     {!! HTML::script('js/controllers/surveysController.js')!!}
     {!! HTML::script('js/services/surveyService.js')!!}
@@ -87,6 +89,8 @@
 
 
     {!! HTML::script('scripts/functions.js') !!}
+    @yield('script')
+
 
     @yield('footer')
 </body>

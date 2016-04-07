@@ -16,9 +16,18 @@ Route::get('/', 'SearchController@index');
 Route::get('home', 'HomeController@index');
 Route::get('/phone', 'PhoneController@index');
 
+
 Route::bind('elector', function($id){
     return App\Elector::where('id', $id)->first();
 });
+
+Route::get('/visual', function() {
+    return View::make('data-visualisation');
+});
+
+Route::get ('/geo','GeoController@store');
+Route::get ('/geo/api','GeoController@toGeojson');
+
 Route::get('/surveys', function() {
     return View::make('index');
 });
@@ -61,7 +70,6 @@ $router->resource('elector', 'ElectorController',
         'edit'  => 'elector_path',
         'update'  => 'elector_path' ],
         'only'=>['index','show','edit','update']
-
     ]);
 
 $router->resource('address', 'AddressController',
@@ -70,11 +78,8 @@ $router->resource('address', 'AddressController',
         'index' => 'address_path',
         'show'  => 'address_path',
         'edit'  => 'address_path',
-        'update'  => 'address_path'
-        ],
+        'update'  => 'address_path'],
         'only'=>['index','show','edit','update']
-
-
     ]);
 $router->resource('phone', 'PhoneController',
 
@@ -91,23 +96,10 @@ $router->resource('phone', 'PhoneController',
     ]);
 
 
-////Route::controllers([
-////    'auth' => 'Auth\AuthController',
-////    'password' => 'Auth\PasswordController',
-////]);
-//
-//// Authentication routes...
+
 Route::get('auth/login', 'Auth\AuthController@getLogin');
 Route::post('auth/login', 'Auth\AuthController@postLogin');
-//Route::get('auth/register', 'Auth\AuthController@getRegister');
-//Route::post('auth/register', 'Auth\AuthController@postRegister');
+
 Route::get('auth/logout', 'Auth\AuthController@getLogout');
 
-/////*
-//// * Display SQL Queries
-//// */
-////Event::listen('illuminate.query', function($sql)
-////{
-////    var_dump($sql);
-////});
 

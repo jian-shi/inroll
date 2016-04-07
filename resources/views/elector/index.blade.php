@@ -6,11 +6,11 @@
 	{!! Form::open(['method'=> 'GET', 'class'=>'form-horizontal']) !!}
 		<h3 class="bg-info">Search Electors</h3>
 		<div class="form-group">
-			{{--<div class="col-sm-2">{!! Form::input('id','id',null, ['class' =>'form-control','placeholder' => 'Elector ID']) !!} </div>--}}
+			{{--<div class="col-sm-3">{!! Form::input('search','id',null, ['class' =>'form-control','placeholder' => 'Elector ID']) !!} </div>--}}
       		<div class="col-sm-3">{!! Form::select('electorate', $electorates,null, ['class' =>'form-control']) !!} </div>
-      		<div class="col-sm-3">{!! Form::input('search', 'surname', null, ['required','class' =>'form-control','placeholder' => 'Surname']) !!}</div>
-      		<div class="col-sm-3">{!! Form::input('search', 'given_name', null, ['class' =>'form-control','placeholder' => 'Given Name']) !!}</div>
-   	 	    <div class="col-sm-3">{!! Form::submit('Search',  ['class'=> 'btn btn-primary pull-left']) !!}</div>
+      		<div class="col-sm-2">{!! Form::input('search', 'surname', null, ['required','class' =>'form-control','placeholder' => 'Surname']) !!}</div>
+      		<div class="col-sm-2">{!! Form::input('search', 'given_name', null, ['class' =>'form-control','placeholder' => 'Given Name(s)']) !!}</div>
+   	 	    <div class="col-sm-2">{!! Form::submit('Search',  ['class'=> 'btn btn-primary pull-left']) !!}</div>
    	 	</div>
 
 	{!! Form::close() !!}
@@ -19,7 +19,7 @@
 @if (count($electors) > 0)
 <div class="col-sm-12">
         <div class="form-group">
-        <h3 class="bg-info">Found {{count($electors)}} Electors</h3>
+        <h3 class="bg-info">{{count($electors)}} results</h3>
         </div>
 
         <div class="form-group">
@@ -31,17 +31,19 @@
             <th>Address</th>
             <th>Feedback</th>
 
-            <th>Party</th>
+            <th>Party Vote</th>
             <th>GNA</th>
             <th>Save</th>
         </thead>
         <tbody>
+
+
             @foreach ($electors as $elector)
             <tr>
             <td>{{{ $elector->id }}}</td>
             <td>{{{ $elector->title }}}</td>
             <td>{!! link_to_route('elector_path', $elector->forenames.", ".$elector->surname, [$elector->id]) !!}</td>
-            <td>{!! $elector->address->street.', '.$elector->address->suburb_town !!}</td>
+            <td>{!! isset($elector->address->flat_no)?$elector->address->flat_no.'/':'' !!}{!! $elector->address->house_no !!}{!!isset($elector->address->house_alpha)?$elector->address->house_alpha:'' !!}{!!' '.$elector->address->street.', '.$elector->address->suburb_town !!}{!!link_to_route('address_path', [$elector->address_id])!!}</td>
             {{--{!! Form::model($elector, ['url'=>'elector/'.$elector->id, 'method'=> 'PATCH', 'class'=>'form-horizontal']) !!}--}}
             {!! Form::model($elector->relation,['action'=> ['RelationController@store', $elector->id],'class'=>'form-horizontal']) !!}
             <td>{!! Form::select($elector->id.'[relation]',[null=>'?','friendly'=>'Friendly', 'persuadable'=>'Persuadable', 'hostile'=>'Hostile', 'candidate_vote'=>'Candidate Vote','home_unclear'=>'Home/ Unclear','not_home'=>'Visited Not Home'], isset($elector->relation->relation)?$elector->relation->relation:null, ['class' =>'form-control','id'=>'input-relation']) !!}</td>
@@ -61,5 +63,12 @@
         </div>
 
 </div>
+
+@else
+{{--<div class="col-sm-12">--}}
+        {{--<div class="form-group">--}}
+        {{--<h3 class="bg-danger">Can't find any elector, please check your input!</h3>--}}
+{{--</div>--}}
+{{--</div>--}}
 @endif
 @stop
