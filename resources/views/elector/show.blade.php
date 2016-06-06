@@ -4,8 +4,7 @@
 	<section>
 		<div class="page-header" id="section-elector-info">
 				<div class="row">
-
-					<div class="col-lg-8">
+					<div class="col-lg-12">
 						@if($errors->any())
 						<div class="alert alert-success" role="alert"> The record of {{$elector->surname}}, {{$elector->given_name}} has been updated!</div>
 						@endif
@@ -22,21 +21,26 @@
 							</div>
 
 							<h3 class="bg-info">Personal Details</h3>
-    						<div class="form-group">							
+    						<div class="form-group">
       							<div class="col-sm-6"><label>Surname</label><input type="text" class="form-control" value="{{$elector->surname}}"></div>
-     							<div class="col-sm-6"><label>First Name</label><input type="text" class="form-control" value="{{$elector->forenames}}"></div>
+     							<div class="col-sm-6"><label>Forename</label><input type="text" class="form-control" value="{{$elector->forenames}}"></div>
    	 						</div>
    	 						<div class="form-group">
       							<div class="col-sm-3"><label>Title</label><input type="text" class="form-control" value="{{$elector->title}}"></div>
      							<div class="col-sm-3"><label>Age Range</label><input type="text" class="form-control" value="{{ (date('Y') - $elector->age->age_to). "~" . (date('Y') - $elector->age->age_from)  }}"></div>
-   	 							<div class="col-sm-3"><label>Occupation</label><input type="text" class="form-control" value="{{$elector->occupation_code or "Unkown"}}"></div>
+   	 							<div class="col-sm-3"><label>Occupation</label><input type="text" class="form-control" value="{{$elector->occupation or "Unkown"}}"></div>
    	 							<div class="col-sm-3"><label>Maori Descent</label><input type="text" class="form-control" value="{{$elector->maori_descent}}"></div>
    	 						</div>
    	 						<h3 class="bg-info">Residential Address Details</h3>
     						<div class="form-group">
-      							<label class="col-sm-12" > Street Address</label>
-      							    <div class="col-sm-12"><input type="text" class="form-control" id="text" value="{{$elector->address->flat_no or ''}} {{$elector->address->house_no}}{{$elector->address->house_alpha}} {{ $elector->address->street}}"></div>
-
+      							<div class="col-sm-6" > <label>Electorate</label>
+      							<input type="text" class="form-control" id="text" value="{{$elector->electorate->electorate}}"></div>
+                                <div class="col-sm-6" > <label>Street Address</label>
+      							@if($elector->flat_no)
+      							<input type="text" class="form-control" id="text" value="{{$elector->flat_no or ''}}/{{$elector->house_no}}{{$elector->house_alpha}} {{ $elector->street}}"></div>
+      							@else
+      							<input type="text" class="form-control" id="text" value="{{$elector->house_no}}{{$elector->house_alpha}} {{ $elector->street}}"></div>
+                                @endif
     						</div>
     						<div class="form-group">
       							<div class="col-sm-6"><label>Suburb, Town or Rd </label><input type="text" class="form-control" value="{{$elector->address->suburb_town}}"></div>

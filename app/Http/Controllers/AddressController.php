@@ -5,6 +5,9 @@ use App\Address;
 use App\Electorate;
 use Illuminate\Http\Request;
 use App\Inroll\Repositories\AddressRepository;
+use App\Pagination;
+use Illuminate\Support\Facades\DB;
+
 
 class AddressController extends Controller {
 
@@ -23,110 +26,64 @@ class AddressController extends Controller {
         $this->electorate_lists = Electorate::lists('electorate', 'id');
     }
 
-	public function index()
+	public function index(Request $request)
 	{
+        if($street =$request->get('street')){
+            $addresses = $this->getAddresses($request);
+            $query = Address::where('street', $street);
+            if ($request->get('electorate') || $request->get('house'))   {
+                $electorate_group = collect([$addresses->first()]);
+            }
+            else{
+                $electorate_group = $query->distinct()->get(array('electorate_id'));
+            }
+
+            return View('address.list', compact('addresses'))->with('electorates',$this->electorate_lists)->with('electorate_group',$electorate_group);
+        }
+
         return View('address.index')->with('electorates',$this->electorate_lists);
 	}
 
-    public function query(Request $request)
+    public function getAddresses($request)
     {
-        $request->flash();
-        $addressId = $request->get('addressId');
-        $electorate=$request->get('electorate');
-        $street=$request->get('street');
-        $match['street'] = $street;
-
-        if ($electorate != 0){
-            $match = array_add ($match, 'electorate_id', $electorate);
-        }
-
-        if ($suburb=$request->get('suburb')){
-            $match = array_add ($match, 'suburb_town', $suburb);
-        }
-
-        if ($house=$request->get('house')){
-            $match = array_add ($match, 'house_no', $house);
-        };
-
-
-        $addresses = $this->address->getByField($match);
-
-        return View('address.relation', compact('addresses'))->with('electorates', $this->electorate_lists);
-
+        $addresses = $this->address->getAddress($request)->paginate(15);
+        return $addresses;
     }
-    
 
-
-	/**
-	 * Show the form for creating a new resource.
-	 * GET /addresses/create
-	 *
-	 * @return Response
-	 */
-	public function create()
-	{
-		//
-	}
-
-	/**
-	 * Store a newly created resource in storage.
-	 * POST /addresses
-	 *
-	 * @return Response
-	 */
-	public function store()
-	{
-		//
-	}
-
-	/**
-	 * Display the specified resource.
-	 * GET /addresses/{id}
-	 *
-	 * @param  int  $id
-	 * @return Response
-	 */
 	public function show(Address $address)
 	{
         return view('address.show', compact('address'));
 	}
 
-	/**
-	 * Show the form for editing the specified resource.
-	 * GET /addresses/{id}/edit
-	 *
-	 * @param  int  $id
-	 * @return Response
-	 */
-	public function edit(Address $address, Request $request)
-	{
-        //
-	}
+    public function findGap(){
+        $addresses = DB::table('electors')->select('house_no','suburb_town', 'street')->distinct()->where('electorate_id', 12)->orderby ('street', 'house_no' )->get();
+//        $grouped = [];
+//        foreach($addresses as $key => $value){
+//            $grouped[$value['street'].", ".$value['suburb_town']][] = $value['house_no'];
+//        }
 
-	/**
-	 * Update the specified resource in storage.
-	 * PUT /addresses/{id}
-	 *
-	 * @param  int  $id
-	 * @return Response
-	 */
-	public function update($id)
-	{
-		//
-	}
+//        foreach (range(0,10) as $number){
+//            echo $number."</br>";
+//        }
 
-	/**
-	 * Remove the specified resource from storage.
-	 * DELETE /addresses/{id}
-	 *
-	 * @param  int  $id
-	 * @return Response
-	 */
-	public function destroy($id)
-	{
-		//
-	}
+        $info = array('coffee', 'brown', 'caffeine');
+        // list() doesn't work with strings
+        list($drink, , $power) = $info;
+        echo "$drink has $power.\n";
 
+        //array_flip(): Can only flip STRING and INTEGER values!
+        $input = array("oranges", "apples", "pears");
+        $flipped = array_flip($input);
 
+        print_r($flipped);
 
+//        foreach($grouped as $key => $value){
+//            $range = range(min($value), max($value));
+//            foreach ($range as $item){
+//                    if(!in_array($item, $value)){
+//                        echo($item ." ". $key."<br>");
+//                    }
+//            }
+//        }
+    }
 }

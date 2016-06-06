@@ -11,7 +11,10 @@ use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Facades\Redirect;
 class DbManageController extends Controller
 {
-
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
 
     public function index()
     {
@@ -68,7 +71,7 @@ class DbManageController extends Controller
     public function update()
     {
 
-        DB::table('electors')
+        DB::table('electors_april')
             ->update(['address_id' => DB::raw('concat(`electorate_id`,"_",`meshblock_id`,"_",`house_no`,"_",`flat_no`,"_",
    `house_alpha`,"_",`street`)')]);
         echo "1 sucess";
@@ -128,7 +131,7 @@ class DbManageController extends Controller
             DB::statement('update electors e
             left join relation r
             on e.id =r.elector_id
-            left join electors_may em
+            left join electors_april em
             on em.id=r.elector_id
             set r.is_gna=0
             where e.street != em.street');

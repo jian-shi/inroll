@@ -5,7 +5,7 @@ use Illuminate\Database\Eloquent\Model;
 class Address extends Model 
 {
 	protected $fillable = [];
-    protected $table = 'addresses';
+    protected $table = 'address';
 
     public function electors(){
         return $this->hasMany('App\Elector');

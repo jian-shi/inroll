@@ -1,9 +1,8 @@
 <?php namespace App\Inroll\Repositories;
 
 use App\Elector;
-use App\Inroll\Repositories\DbRepository;
 
-class ElectorRepository extends DbRepository implements ElectorRepositoryInterface
+class ElectorRepository extends DbRepository
 {
 
     protected  $model;

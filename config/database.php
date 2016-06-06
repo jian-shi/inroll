@@ -61,6 +61,7 @@ return [
             'charset'   => 'utf8',
             'collation' => 'utf8_unicode_ci',
             'prefix'    => '',
+            'port'      => '8889',
             'strict'    => false,
         ],
 

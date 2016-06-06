@@ -45,7 +45,6 @@ Route::group(['prefix' => 'api'], function() {
     Route::resource('questions','QuestionController');
     Route::resource('answers','AnswerController');
     Route::get('survey/{id}/questions', 'QuestionController@index');
-
 });
 
 
@@ -55,12 +54,12 @@ Route::bind('address', function($id){
 
 Route::get ('db','DBManageController@update');
 Route::resource ('elector.relation','RelationController');
-Route::get('query', 'AddressController@query');
+Route::get('findgap', 'AddressController@findGap');
 
 App::bind('App\Inroll\Repositories\ElectorRepositoryInterface','App\Inroll\Repositories\ElectorRepository');
 App::bind('App\Inroll\Repositories\AddressRepositoryInterface','App\Inroll\Repositories\AddressRepository');
 
-Route::get('Request::url()/export', ['uses' => 'SearchController@export', 'as' => 'export']);
+Route::get('/export', ['uses' => 'SearchController@export', 'as' => 'export']);
 
 
 $router->resource('elector', 'ElectorController',
@@ -73,14 +72,14 @@ $router->resource('elector', 'ElectorController',
     ]);
 
 $router->resource('address', 'AddressController',
-
     ['names'=>[
         'index' => 'address_path',
         'show'  => 'address_path',
-        'edit'  => 'address_path',
-        'update'  => 'address_path'],
-        'only'=>['index','show','edit','update']
+        ],
+        'only'=>['index','show']
     ]);
+
+Route::controller('address', 'AddressController');
 $router->resource('phone', 'PhoneController',
 
     ['names'=>[
@@ -91,15 +90,16 @@ $router->resource('phone', 'PhoneController',
         'query' => 'phone_path'
     ],
         'only'=>['index','show','edit','update','query']
-
-
     ]);
 
 
 
 Route::get('auth/login', 'Auth\AuthController@getLogin');
 Route::post('auth/login', 'Auth\AuthController@postLogin');
-
 Route::get('auth/logout', 'Auth\AuthController@getLogout');
 
 
+//Event::listen('illuminate.query', function($query)
+//{
+//    var_dump($query);
+//});

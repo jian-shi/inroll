@@ -41,14 +41,24 @@ class RelationController extends Controller {
 	public function store()
 	{
         $data = Input::except('_token');
-        //dd($data);
+
         foreach($data as $key => $value) {
-            if($value['relation']!=null||$value['is_gna']!=null||$value['party_vote']!=null){
+            //var_dump ($value['relation']==true||$value['is_gna']==true||$value['party_vote']==true);
+            if($value['relation']==true||$value['is_gna']==true||$value['party_vote']==true){
                 $relation = Relation::firstOrNew(['elector_id' => $key]);
                 $value['user_id'] = Auth::user()->id;
                 $relation->fill($value);
                 $relation->save();
             }
+
+
+            if(Relation::where('elector_id', $key)->exists() && $value['is_gna']== 0){
+                $relation = Relation::firstOrNew(['elector_id' => $key]);
+                $value['user_id'] = Auth::user()->id;
+                $relation->fill($value);
+                $relation->save();
+            }
+
         }
         session()->flash('flash_message', 'Records have been updated!');
         return redirect::back();

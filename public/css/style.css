@@ -66,3 +66,27 @@ table.floatThead-table {
     opacity: 0.7;
 }
 
+@media (min-width: 992px) {
+    #carbonads {
+        margin-top: 0;
+    }
+}
+@media (min-width: 480px) {
+    #carbonads {
+        margin: 50px auto 0;
+        border-width: 1px;
+        border-radius: 4px;
+    }
+}
+#carbonads {
+    display: block;
+    overflow: hidden;
+    margin: 50px -15px 0;
+    padding: 15px 15px 15px 160px;
+    font-size: 13px;
+    line-height: 1.5;
+    text-align: left;
+    border: solid #866ab3;
+    border-width: 1px;
+}
+
