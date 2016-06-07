@@ -87,7 +87,7 @@ use Illuminate\Support\Facades\DB;
                  if ($export == 'door')
               {
                  $dbSelect = 'CONCAT(CONCAT_WS(" ", CONCAT_WS("/",NULLIF(`address`.`flat_no`, ""),`address`.`house_no`),`address`.`house_alpha`), " ",`address`.`street`) as address,`electors`.`title` as title, CONCAT(`age`.`age_from`,"~",`age`.`age_to`) as age, electors.occupation as occupation, address.street as street, address.suburb_town as address2,`address`.`post_code` as postalCode, `census`.`areaunit` as area_unit,`address`.`city` as city, CONCAT(`electors`.`forenames`," ",`electors`.`surname`) as sort_name, `address`.`id` as addressId, `address`.`route_id` as route_id';
-                 $group = ['name','addressId'];
+                 $group = ['sort_name','addressId'];
                  $order = 'route_id,street,MOD(address.`house_no`,2),CAST(`address`.`house_no` AS DECIMAL)';
              }
              else {
