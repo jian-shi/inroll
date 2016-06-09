@@ -1,7 +1,6 @@
 <?php
 
 namespace App\Http\Controllers;
-
 use Request;
 use App\Answer;
 use App\Http\Requests;
