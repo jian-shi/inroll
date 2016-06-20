@@ -41,7 +41,6 @@ class RelationController extends Controller {
 	public function store()
 	{
         $data = Input::except('_token');
-
         foreach($data as $key => $value) {
             //var_dump ($value['relation']==true||$value['is_gna']==true||$value['party_vote']==true);
             if($value['relation']==true||$value['is_gna']==true||$value['party_vote']==true){
