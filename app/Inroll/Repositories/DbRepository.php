@@ -75,12 +75,16 @@ use Illuminate\Support\Facades\DB;
              $export = $request->get('export');
 
 
+
              /*
               * CONCAT_WS will skip any null values, and by using NULLIF any empty ones too.
               */
 
              if ($method == 'search'){
                  $dbSelect = 'count(electors.id) as elector, count(Distinct CONCAT_WS("/", `address`.`house_no`, " ", `address`.`flat_no`,`address`.`house_alpha`,  " ", `address`.`street`)) as address' ;
+                 $subquery = "*";
+                 $order = 'elector';
+                 $groupBy = "elector";
              }
 
              if ($method=='download'){
@@ -91,9 +95,11 @@ use Illuminate\Support\Facades\DB;
                  $order = 'route_id,street,MOD(address.`house_no`,2),CAST(`address`.`house_no` AS DECIMAL)';
              }
              else {
-                 $dbSelect = 'CONCAT(CONCAT_WS(" ", CONCAT_WS("/",NULLIF(`address`.`flat_no`, ""),`address`.`house_no`),`address`.`house_alpha`), " ",`address`.`street`) as address, address.flat_no as flat, address.street as street, address.suburb_town as suburb_town,address.city as city, `address`.`post_code` as postal_code, `census`.`areaunit` as area_unit, GROUP_CONCAT(CONCAT(SUBSTRING(`electors`.`forenames` from 1 for 1)," ",`electors`.`surname`) SEPARATOR ", ")as sort_name, GROUP_CONCAT(SUBSTRING_INDEX(`electors`.`forenames`, " ", 1) SEPARATOR ", ")as first_name,`address`.`id` as addressId, `address`.`route_id` as route_id';
-                 $group = 'addressId';
-                 $order = 'route_id,street,MOD(address.`house_no`,2),CAST(`address`.`house_no` AS DECIMAL)';
+                 $subquery = 'route_id, house_no, street, address, suburb_town, city, postal_code, GROUP_CONCAT(sort_name SEPARATOR ", ") as name, area_unit, GROUP_CONCAT(first_name) as forenames';
+                 $dbSelect = 'address.`house_no` as house_no, CONCAT(CONCAT_WS(" ", CONCAT_WS("/",NULLIF(`address`.`flat_no`, ""),`address`.`house_no`),`address`.`house_alpha`), " ",`address`.`street`) as address, address.flat_no as flat, address.street as street, address.suburb_town as suburb_town,address.city as city, `address`.`post_code` as postal_code, `census`.`areaunit` as area_unit, concat(GROUP_CONCAT(SUBSTRING_INDEX(`electors`.`forenames`, " ", 1)SEPARATOR "/" )," ",`electors`.`surname`)as sort_name, `electors`.`surname` as surname, GROUP_CONCAT(SUBSTRING_INDEX(`electors`.`forenames`, " ", 1) SEPARATOR ", ")as first_name,`address`.`id` as addressId, `address`.`route_id` as route_id';
+                 $group = ['addressId','surname'];
+                 $order = 'route_id,street,MOD(`house_no`,2),CAST(`house_no` AS DECIMAL)';
+                 $groupBy = 'addressId';
              }
              }
 
@@ -105,11 +111,12 @@ use Illuminate\Support\Facades\DB;
                      $join->on('age.id', '=', 'electors.date_of_birth_range');
                  })
                  -> leftjoin('census',function($join){
-                     $join->on('census.id', '=', 'address.meshblock_id');
+                     $join->on('census.id', '=', 'address.meshblock');
                  })
                  -> leftjoin('relation',function($join){
                      $join->on('electors.id', '=', 'relation.elector_id');
                  })
+
                  ->select(DB::raw($dbSelect))
 
                  ->where(function($query) use ($occupation, $area_units, $electorates){
@@ -123,7 +130,9 @@ use Illuminate\Support\Facades\DB;
                      }
                  })
                  ->whereIn('age.id', range($age_from, $age_to))
-                 ->whereIn('census.nzdep', range($dep_from,$dep_to))
+                 ->where(function($query)use ($dep_from,$dep_to){
+                     $query->whereNull('census.nzdep')
+                           ->orWhereIn('census.nzdep', range($dep_from,$dep_to));})
                  ->where(function($query){
                      $query->whereNull('relation.is_gna')
                          ->orWhere('relation.is_gna', 0);
@@ -140,10 +149,16 @@ use Illuminate\Support\Facades\DB;
              }
 
              if($method == 'download'){
-                 $query->groupBy($group)->orderBy(DB::raw($order));
+                 $query->groupBy($group);
              }
 
-             $data = $query->get();
+             $data = DB::table( DB::raw("({$query->toSql()}) as sub") )
+                 ->mergeBindings($query)
+                 ->select(DB::raw($subquery))
+                 ->groupBy(DB::raw($groupBy))
+                 ->orderBy(DB::raw($order))
+                 ->get();
+
 
              return $data;
          }

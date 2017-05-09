@@ -70,21 +70,14 @@ class DbManageController extends Controller
      */
     public function update()
     {
-
-        DB::table('electors_april')
+        DB::table('electors')
             ->update(['address_id' => DB::raw('concat(`electorate_id`,"_",`meshblock_id`,"_",`house_no`,"_",`flat_no`,"_",
    `house_alpha`,"_",`street`)')]);
         echo "1 sucess";
         /* update delivery_route d, addresses a
            set d.`address_id` = a.id
-            where d.`address` = CONCAT(a.`flat_no`,"/",a.`house_no`,a.`house_alpha`,  " ", a.`street`) and a.`electorate_id` =12
+            where d.`id` = CONCAT(a.`street`，a.`house_no`) and a.`electorate_id` =12
         */
-
-        /*
-         * update delivery_route d, addresses a
-         *  set a.`route_id` = d.`route_id`
-         *  where d.`address_id` = a.`id` and a.`electorate_id` =12
-         */
 
         /*
          * update addresses a
@@ -103,7 +96,7 @@ class DbManageController extends Controller
          * update electors e, occupation_category o set e.`occupation_code` =o.`category` where e.`occupation` = o.`occupation`
          */
 
-        DB::table('addresses')->truncate();
+        DB::table('address')->truncate();
         try{
             DB::statement('insert ignore addresses (id, electorate_id ,meshblock_id,
                 flat_no ,
@@ -141,11 +134,7 @@ class DbManageController extends Controller
             echo $e;
         }
 
-
         return view('db');
-
-
-
     }
 
     /**
